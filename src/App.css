@@ -40,14 +40,14 @@ section {
   padding: 5px;
 }
 
-.list-transport{
+.list-transport, .selected-transport .titlebar .list-transport, .list-direction {
   list-style: none;
   margin: 0;
   padding: 0;
   text-align: center;
 }
 
-li{
+.list-transport li, .selected-transport .titlebar .list-transport a, .list-direction a{
   display: inline-block;
   border: 1px solid #d0d3d4;
   position: relative;
@@ -56,20 +56,20 @@ li{
   transition: all 0.3s ease;
 }
 
-li.active{
+.list-transport  li.active{
   background: #f65152;
 }
 
-li.active a{
+.list-transport  li.active a{
   color: white;
 }
 
-ul li:first-child{
+.list-transport ul li:first-child, .selected-transport .titlebar .list-transport a:first-child, .list-direction a:first-child{
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
 }
 
-ul li:last-child{
+ul li:last-child, .selected-transport .titlebar .list-transport a:last-child, .list-direction a:last-child{
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
@@ -143,15 +143,38 @@ span, p{
 .selected-transport .container{
     width: 100%;
     display: inline-flex;
-    flex-direction: column;
+    justify-content: space-around;
 }
 
 .titlebar{
-    width: 50%;
+    padding: 0 20px;
 }
 .selected-transport span{
     color: #999;
 }
+
+.selected-transport .titlebar .list-transport a.active, .list-direction a.active{
+    color: white;
+    background: #f65152;
+}
+
+.selected-transport .titlebar .list-transport a, .list-direction a{
+    color: #999;
+    padding: 12px 22px;
+}
+
+.list-station{
+  display: flex;
+  justify-content: center;
+}
+
+.list-station ul{
+  font-size: 16px;
+  letter-spacing: 0px;
+  line-height: 25px;
+  color: #444;
+}
+
 span.red-title{
     color: #f65152;
     font-weight: 600;

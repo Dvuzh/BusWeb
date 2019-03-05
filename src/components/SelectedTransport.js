@@ -1,8 +1,9 @@
 import {Component} from "react";
 import React from "react";
-import {Link, BrowserRouter, Route} from "react-router-dom";
-import App from "../App";
-import Map from "./Map";
+import {Link, BrowserRouter, Route , NavLink} from "react-router-dom";
+
+import MapY from "./MapY";
+import StationTransport from "./StationTransport";
 
 class SelectedTransport extends Component {
     constructor(props) {
@@ -11,11 +12,11 @@ class SelectedTransport extends Component {
         this.state = {car: {num: 1, directionOne: 5, directionTwo: 2, id: 1, type: 0}};
     }
 
-    componentWillMount() {
-        console.log(this.props.params)
-        // let card = this.props.transports.find((transport)=>transport.id == this.props.params.transportId);
-        // this.setState({...card});
-    }
+    // componentWillMount() {
+    //     console.log(this.props.params)
+    //     // let card = this.props.transports.find((transport)=>transport.id == this.props.params.transportId);
+    //     // this.setState({...card});
+    // }
 
 
     render() {
@@ -25,7 +26,7 @@ class SelectedTransport extends Component {
                 <div className="selected-transport">
                     <section>
                         <div className="container">
-                            <div className="titlebar left">
+                            <div className="titlebar">
                                   <span
                                       className="red-title">{currentCar.type === 0 ? 'Автобус ' : currentCar.type === 1 ? 'Трамвай ' : 'Троллейбус '}
                                       № {currentCar.num}</span>
@@ -34,25 +35,20 @@ class SelectedTransport extends Component {
                                 <span
                                     className="red-title">{currentCar.directionOne + currentCar.directionTwo} ед.</span>
                             </div>
-                            <div className="titlebar rigth">
+                            <div className="titlebar">
                                 <ul className="list-transport">
-                                    <li>
-                                        <Link to={"/"} replace> Главная </Link>
-                                    </li>
-                                    <li>
-                                        <Link to="/"> Остановки </Link>
-                                    </li>
-                                    <li>
-                                        <Link to={"/map"} replace> На карте </Link>
-                                    </li>
+                                        <Link to={"/"} > Главная </Link>
+                                        <NavLink activeClassName="active" exact to={`/route/${currentCar.id}/station/0`}> Остановки </NavLink>
+                                        <NavLink activeClassName="active" exact to={`/route/${currentCar.id}/map`}> На карте </NavLink>
+
                                 </ul>
                             </div>
                         </div>
-
                     </section>
 
-                    <Route exact path="/" component={App}/>
-                    <Route path="/map" component={Map}/>
+
+                    <Route path="/route/:transportId/station/0" component={StationTransport}/>
+                    <Route path="/route/:transportId/map" component={MapY}/>
                 </div>
             </BrowserRouter>
         );
