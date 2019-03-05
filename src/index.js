@@ -7,19 +7,16 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import SelectedTransport from "./components/SelectedTransport";
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
-
 ReactDOM.render((
     <BrowserRouter>
         <div>
             <Switch>
-                <Route path="/" component={App} />
-                <Route path="/route" component={SelectedTransport} />
+                <Route exact path="/" component={App} />
+                <Route path="/route/:transportId" component={SelectedTransport} />
             </Switch>
         </div>
     </BrowserRouter>
-), document.getElementById('root'))
+), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

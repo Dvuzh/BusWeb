@@ -5,8 +5,6 @@ import Header from "./components/Header";
 import Map from "./components/Map";
 import FilterTransports from "./components/FilterTransports";
 import Transports from "./components/Transports";
-import SelectedTransport from "./components/SelectedTransport";
-import {BrowserRouter, Route} from "react-router-dom";
 
 
 
@@ -20,11 +18,10 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                {/*<SelectedTransport/>*/}
-            <Header />
-            <Map />
-            <FilterTransports updateData={this.updateData} />
-            <Transports filter={ this.state.filter} />
+                <Header />
+                <Map />
+                <FilterTransports updateData={this.updateData} />
+                <Transports filter={ this.state.filter} />
             </div>
         );
     }
