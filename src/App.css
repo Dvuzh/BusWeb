@@ -140,6 +140,23 @@ span, p{
   justify-content: center;
 }
 
+.selected-transport .container{
+    width: 100%;
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.titlebar{
+    width: 50%;
+}
+.selected-transport span{
+    color: #999;
+}
+span.red-title{
+    color: #f65152;
+    font-weight: 600;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

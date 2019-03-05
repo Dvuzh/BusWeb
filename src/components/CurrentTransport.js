@@ -24,7 +24,7 @@ class CurrentTransport extends Component {
                         <br/>
                         <span> № {this.props.car.num}</span>
                     </div>
-                   <span>({this.props.car.count} / {this.props.car.active})</span>
+                   <span>({this.props.car.directionOne} / {this.props.car.directionTwo})</span>
                 </Link>
             </div>
         );
