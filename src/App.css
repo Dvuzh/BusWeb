@@ -22,6 +22,123 @@
 .App-link {
   color: #61dafb;
 }
+section {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.container{
+  padding: 30px;
+}
+
+.btn-map{
+  color: white;
+  background: #f65152;
+  border-radius: 3px;
+  border: none;
+  font-size: 20px;
+  font-weight: 300;
+  padding: 5px;
+}
+
+.list-transport{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+li{
+  display: inline-block;
+  border: 1px solid #d0d3d4;
+  position: relative;
+  line-height: 1;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+li.active{
+  background: #f65152;
+}
+
+li.active a{
+  color: white;
+}
+
+ul li:first-child{
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+ul li:last-child{
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+li a{
+  color: #999;
+  padding: 12px 22px;
+  display: block;
+  pointer-events: none;
+}
+
+.header {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.inner-content{
+  padding: 30px;
+}
+
+.inner-content:first-child{
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-image:
+          linear-gradient(
+                  to top,
+                  #e5e5e5,
+                  rgba(0, 0, 0, 0)
+          ) 7 95%;
+}
+
+.counter-title{
+  padding: 0 5px;
+}
+.counter-title span{
+  font-size: 49px;
+  font-weight: 300;
+  clear: both;
+  line-height: 58px;
+  color: #f65152;
+}
+
+span, p{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+.block-car{
+  border: 1px solid #d0d3d4;
+  font-size: 13px;
+  line-height: 150%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row-transports{
+  display: grid;
+  grid-template-columns: repeat(14, 90px);
+  grid-auto-rows: 158px;
+  grid-gap: 5px;
+  justify-content: center;
+}
 
 @keyframes App-logo-spin {
   from {

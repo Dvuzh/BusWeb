@@ -1,28 +1,34 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+// import {render} from 'react-dom';
 import './App.css';
+import Header from "./components/Header";
+import Map from "./components/Map";
+import FilterTransports from "./components/FilterTransports";
+import Transports from "./components/Transports";
+import SelectedTransport from "./components/SelectedTransport";
+import {BrowserRouter, Route} from "react-router-dom";
+
+
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+    state = { filter: -1 };
+
+    updateData = (value) => {
+        this.setState({ filter: value })
+    };
+
+    render() {
+        return (
+            <div className="App">
+                {/*<SelectedTransport/>*/}
+            <Header />
+            <Map />
+            <FilterTransports updateData={this.updateData} />
+            <Transports filter={ this.state.filter} />
+            </div>
+        );
+    }
 }
+
 
 export default App;
