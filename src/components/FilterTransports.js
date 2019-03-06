@@ -1,15 +1,14 @@
-import {Component} from "react";
-import React from "react";
+import React, {PureComponent} from "react";
 
-class FilterTransports extends Component {
+class FilterTransports extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {activeClasses: [true, false, false, false], filter: -1};
-        this.addActiveClass= this.addActiveClass.bind(this);
+        // this.addActiveClass= this.addActiveClass.bind(this);
     }
 
     addActiveClass(index) {
-        const activeClasses = [...this.state.activeClasses.map((item, i)=> {return i === index ? true : false;})];
+        const activeClasses = [...this.state.activeClasses.map((item, i)=> {return i === index ;})];
         this.setState({activeClasses});
         this.props.updateData(index - 1)
     }

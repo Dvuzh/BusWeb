@@ -163,9 +163,25 @@ span, p{
     padding: 12px 22px;
 }
 
-.list-station{
+.list-station, .props-station{
   display: flex;
   justify-content: center;
+}
+
+.container.station{
+  display: flex;
+  flex-flow: column wrap;
+  align-content: center;
+}
+
+.btn-switch{
+  width: 50px;
+  align-self: center;
+}
+
+span.station-first-last{
+  align-self: center;
+  color: #f65152;
 }
 
 .list-station ul{

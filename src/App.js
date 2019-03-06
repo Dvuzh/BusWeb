@@ -1,43 +1,54 @@
-import React, {Component} from 'react';
-import {render} from 'react-dom';
+import React, {PureComponent} from "react";
+// import {render} from 'react-dom';
 import './App.css';
-import Header from "./components/Header";
+
 import MapY from "./components/MapY";
 import FilterTransports from "./components/FilterTransports";
 import Transports from "./components/Transports";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
-import SelectedTransport from "./components/SelectedTransport";
 
+function Header() {
+    return (
+        <section>
+            <div className="header">
+                <div className="inner-content">
+                    <div className="counter-title">
+                        <span> 286</span>
+                        <p> На маршрутах</p>
+                    </div>
+                </div>
+                <div className="inner-content">
+                    <div className="counter-title">
+                        <span> -13 °С</span>
+                        <p> На улице</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
 
-class App extends Component {
-    state = {filter: -1};
+class App extends PureComponent {
+    state = {filter: -1, isMapVisible: false};
 
     updateData = (value) => {
-        this.setState({filter: value})
+        this.setState({filter: value});
     };
 
     render() {
-        const App = () => (
+        return (
             <div className="App">
                 <Header/>
                 <section>
                     <div className="container">
-                        <button type="button" className="btn-map" onClick={() => {return <MapY />;}}> Карта</button>
+                        <button type="button" className="btn-map"
+                                onClick={() => this.setState({isMapVisible: !this.state.isMapVisible})}> Карта
+                        </button>
+                        {this.state.isMapVisible && <MapY/>}
                     </div>
                 </section>
                 <FilterTransports updateData={this.updateData}/>
                 <Transports filter={this.state.filter}/>
             </div>
-        );
-        return (
-            <BrowserRouter>
-                <div>
-                    <Switch>
-                        <Route exact path="/" component={App}/>
-                        <Route path="/route/:transportId" component={SelectedTransport} />
-                    </Switch>
-                </div>
-            </BrowserRouter>
         );
     }
 }

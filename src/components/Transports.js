@@ -1,8 +1,7 @@
-import {Component} from "react";
-import React from "react";
+import React, {PureComponent} from "react";
 import CurrentTransport from "./CurrentTransport";
 
-class Transports extends Component {
+class Transports extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
