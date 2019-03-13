@@ -4,7 +4,6 @@ class FilterTransports extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {activeClasses: [true, false, false, false], filter: -1};
-        // this.addActiveClass= this.addActiveClass.bind(this);
     }
 
     addActiveClass(index) {
@@ -20,16 +19,16 @@ class FilterTransports extends PureComponent {
                 <div className="container">
                     <ul className="list-transport">
                         <li className={activeClasses[0]? "active" : ""} onClick={() => this.addActiveClass(0)} >
-                            <a>Все</a>
+                            Все
                         </li>
                         <li className={activeClasses[1]? "active" : ""} onClick={() => this.addActiveClass(1)} >
-                            <a>Автобусы</a>
+                            Автобусы
                         </li>
                         <li className={activeClasses[2]? "active" : ""} onClick={() => this.addActiveClass(2)} >
-                            <a>Трамваи</a>
+                            Трамваи
                         </li>
                         <li className={activeClasses[3]? "active" : ""} onClick={() => this.addActiveClass(3)} >
-                            <a>Троллейбусы</a>
+                            Троллейбусы
                         </li>
                     </ul>
                 </div>

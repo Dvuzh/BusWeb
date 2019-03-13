@@ -3,7 +3,7 @@ import { YMaps, Map } from 'react-yandex-maps';
 
 class MapY extends PureComponent {
     render() {
-        console.log('tut')
+        // console.log('tut')
         const ContactMap = () => {
             return (
                 <YMaps>

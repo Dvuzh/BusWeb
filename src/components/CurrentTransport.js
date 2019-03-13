@@ -13,13 +13,13 @@ class CurrentTransport extends PureComponent {
             <div className="block-car">
                 <Link to={ `/route/${this.props.car.id}/station` } >
                     <div className="bus-title">
-                        <img src={this.props.car.typeCar === 0 ? bus : this.props.car.typeCar === 1 ? tram : troll}  className="car-image" alt=""/>
+                        <img src={this.props.car.type === 0 ? bus : this.props.car.type === 1 ? tram : troll}  className="car-image" alt=""/>
                         <br/>
-                        {this.props.car.typeCar === 0 ? 'Автобус' : this.props.car.typeCar === 1 ? 'Трамвай' : 'Троллейбус'}
+                        <span className={'red-title'}>{this.props.car.type === 0 ? 'Автобус' : this.props.car.type === 1 ? 'Трамвай' : 'Троллейбус'} </span>
                         <br/>
                         <span> № {this.props.car.num}</span>
                     </div>
-                   <span>({this.props.car.directionOne} / {this.props.car.directionTwo})</span>
+                   <span className="gray-title">({this.props.car.directionOne}/{this.props.car.directionTwo})</span>
                 </Link>
             </div>
         );

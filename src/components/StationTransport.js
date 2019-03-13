@@ -1,27 +1,93 @@
 import React, {PureComponent, Component} from "react";
-import {NavLink, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
+import ScrollUpButton from "react-scroll-up-button";
+
+function direction(stations, directions = false) {
+    let modStations = stations;
+    modStations = directions ? modStations : [...modStations].reverse();
+    const filteredStations = modStations.map((item, index) => {
+        return <li key={index}>{item}</li>;
+    });
+
+    return filteredStations;
+}
 
 class FilterDirection extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state = {stations : this.props.stations,  url: this.props.url}
+        this.state = {
+            stations: this.props.stations,
+            url: this.props.url,
+            countDirection: 0,
+            reverseStations: this.props.stations
+        }
     }
 
     render() {
-        let {stations} = this.state;
+        const {stations} = this.state;
+        const {reverseStations} = this.state;
+        const {countDirection} = this.state;
+
+        const stationOne = direction(stations, true);
+        const stationTwo = direction(stations);
+
+        let button = null;
+        if (countDirection === 0) {
+            button =
+                <div className="directions directions-one">
+                    <div>
+                        <span
+                            className="station-first-last">{reverseStations[0]} -<br/> {reverseStations[reverseStations.length - 1]}</span>
+                        <br/>
+                        <button className="btn-switch" onClick={() => {
+                            this.setState({reverseStations: [...reverseStations].reverse()});
+                        }}> switch
+                        </button>
+                    </div>
+                    <FilteredStations listStation={direction(reverseStations, true)}/>
+                </div>
+        } else {
+            button =
+                <div className="directions directions-two">
+                    <div>
+                        <div>
+                            <span
+                                className="station-first-last">{stations[0]} -<br/> {stations[stations.length - 1]}</span>
+                            <br/>
+                        </div>
+                        <FilteredStations listStation={stationOne}/>
+                    </div>
+
+                    <div>
+                        <div>
+                            <span
+                                className="station-first-last">{stations[stations.length - 1]} -<br/> {stations[0]}</span>
+                            <br/>
+                        </div>
+                        <FilteredStations listStation={stationTwo}/>
+                    </div>
+                </div>
+        }
 
         return (
             <section>
                 <div className="container station">
                     <div className="list-direction">
-                        <NavLink exact to={`${this.state.url}`}> Одно направление </NavLink>
-                        <NavLink exact to={`${this.state.url}/1`}> Оба направления </NavLink>
+                        <button className={'btn-left' + (countDirection === 0 ? ' active' : "")} onClick={() => {
+                            this.setState({countDirection: 0})
+                        }}>
+                            Одно направление
+                        </button>
+
+                        <button className={'btn-rigth' + (countDirection === 1 ? ' active' : "")} onClick={() => {
+                            this.setState({countDirection: 1})
+                        }}>
+                            Оба направления
+                        </button>
                     </div>
                     <br/><br/>
-                    <span className="station-first-last">{this.state.stations[0]} -<br/> {this.state.stations[1]}</span>
-                    <br/>
-                    <button className="btn-switch" onClick={() => { stations = stations.reverse(); this.setState({stations: stations });}}> switch</button>
+                    {button}
                 </div>
             </section>
         );
@@ -30,13 +96,11 @@ class FilterDirection extends Component {
 
 const FilteredStations = (props) => {
     return (
-        <section>
-            <div className="list-station">
-                <ul>
-                    {props.stationOne}
-                </ul>
-            </div>
-        </section>
+        <div className="list-station">
+            <ul>
+                {props.listStation}
+            </ul>
+        </div>
     );
 };
 
@@ -50,30 +114,23 @@ class StationTransport extends PureComponent {
                 "ДК им. Малунцева", "КДЦ Кристалл", "Технический университет", "Медицинская академия", "СибАДИ", "Арена-Омск (ул. Лукашевича)"],
             countDirections: 1
         };
-
-    }
-
-    direction(stations, directions = false) {
-        stations = directions ? stations : stations.reverse();
-
-        const filteredStations = stations.map((item, index)=>{
-            return <li key={index}>{item}</li>;
-        });
-
-        return filteredStations;
     }
 
     render() {
-
         const {buildStationsList} = this.state;
-        const stationOne = this.direction(buildStationsList, true);
         const currentUrl = this.props.match.url;
 
         return (
             <div className="content-current-transport">
-                <FilterDirection url={currentUrl} stations={[buildStationsList[0],buildStationsList[buildStationsList.length - 1]]} countDirections={this.state.countDirections}/>
-
-                <FilteredStations stationOne={stationOne}/>
+                <ScrollUpButton
+                    StopPosition={0}
+                    ShowAtPosition={50}
+                    EasingType='easeInOutExpo'
+                    ContainerClassName='scrollup-btn'
+                    TransitionClassName='scrollup-btn__toggled'
+                />
+                <FilterDirection url={currentUrl} stations={buildStationsList}
+                                 countDirections={this.state.countDirections}/>
             </div>
         );
     }

@@ -8,6 +8,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
+    "react-scroll-up-button": "^1.6.4",
     "react-yandex-maps": "^3.0.2"
   },
   "scripts": {
@@ -24,5 +25,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "proxy": "http://localhost:3001"
 }

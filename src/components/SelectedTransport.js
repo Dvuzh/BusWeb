@@ -11,7 +11,7 @@ class SelectedTransport extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            car : {transportId : this.props.transportId, num: 1, directionOne: 5, directionTwo: 2, id: 1, type: 0}
+            car : {num: 1, directionOne: 5, directionTwo: 2, id: this.props.match.params.transportId, type: 0}
         }
     }
 
@@ -36,7 +36,7 @@ class SelectedTransport extends PureComponent {
                             <ul className="list-transport">
                                 <Link to={"/"}> Главная </Link>
                                 <NavLink to={`/route/${car.id}/station`}> Остановки </NavLink>
-                                <NavLink exac to={`/route/${car.id}/map`}> На карте </NavLink>
+                                <NavLink exact to={`/route/${car.id}/map`}> На карте </NavLink>
                             </ul>
                         </div>
                     </div>

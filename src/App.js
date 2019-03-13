@@ -5,6 +5,7 @@ import './App.css';
 import MapY from "./components/MapY";
 import FilterTransports from "./components/FilterTransports";
 import Transports from "./components/Transports";
+import ScrollUpButton from "react-scroll-up-button";
 
 function Header() {
     return (
@@ -37,6 +38,13 @@ class App extends PureComponent {
     render() {
         return (
             <div className="App">
+                <ScrollUpButton
+                    StopPosition={0}
+                    ShowAtPosition={10}
+                    EasingType='easeInOutExpo'
+                    ContainerClassName='scrollup-btn'
+                    TransitionClassName='scrollup-btn__toggled'
+                />
                 <Header/>
                 <section>
                     <div className="container">
@@ -48,6 +56,7 @@ class App extends PureComponent {
                 </section>
                 <FilterTransports updateData={this.updateData}/>
                 <Transports filter={this.state.filter}/>
+
             </div>
         );
     }

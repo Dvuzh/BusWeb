@@ -5,15 +5,13 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import SelectedTransport from "./components/SelectedTransport";
-import StationTransport from "./components/StationTransport";
-import MapY from "./components/MapY";
 
 ReactDOM.render((<BrowserRouter>
     <div>
         <Switch>
-    <Route exact path="/" component={App}/>
-    <Route path="/route/:transportId" component={SelectedTransport} />
-</Switch>
+            <Route exact path="/" component={App}/>
+            <Route path="/route/:transportId" component={SelectedTransport}/>
+        </Switch>
     </div>
 </BrowserRouter>), document.getElementById('root'));
 
