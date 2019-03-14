@@ -6,18 +6,21 @@ import MapY from "./MapY";
 import StationTransport from "./StationTransport";
 
 class SelectedTransport extends PureComponent {
-    // state = {car: {num: 1, directionOne: 5, directionTwo: 2, id: 1, type: 0}};
-
     constructor(props){
         super(props);
         this.state = {
-            car : {num: 1, directionOne: 5, directionTwo: 2, id: this.props.match.params.transportId, type: 0}
+            car : {}
         }
+    }
+
+    componentDidMount() {
+        fetch(`/transports/${this.props.match.params.transportId}`,{ method: 'POST'})
+            .then(result => result.json())
+            .then(car => this.setState(car));
     }
 
     render() {
         const {car} = this.state;
-        // car.id = 8;
 
         return (
             <div className="selected-transport">

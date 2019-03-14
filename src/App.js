@@ -7,33 +7,42 @@ import FilterTransports from "./components/FilterTransports";
 import Transports from "./components/Transports";
 import ScrollUpButton from "react-scroll-up-button";
 
-function Header() {
+function Header(props) {
     return (
         <section>
             <div className="header">
                 <div className="inner-content">
                     <div className="counter-title">
-                        <span> 286</span>
+                        <span> {props.amountTransposrt}</span>
                         <p> На маршрутах</p>
                     </div>
                 </div>
                 <div className="inner-content">
                     <div className="counter-title">
-                        <span> -13 °С</span>
+                        <span> {props.temperature} °С</span>
                         <p> На улице</p>
                     </div>
                 </div>
             </div>
         </section>
     );
-};
+}
 
 class App extends PureComponent {
-    state = {filter: -1, isMapVisible: false};
+    state = {filter: -1, isMapVisible: false, amountTransposrt: 0, temperature : 0};
 
     updateData = (value) => {
         this.setState({filter: value});
     };
+    componentDidMount() {
+        fetch('/transports/amount')
+            .then(res => res.json())
+            .then(amountTransposrt => this.setState(amountTransposrt));
+
+        fetch('/weather/search-location-weather')
+            .then(res => res.json())
+            .then((temperature) => {this.setState( {temperature : temperature.temperature.main.temp})});
+    }
 
     render() {
         return (
@@ -45,7 +54,7 @@ class App extends PureComponent {
                     ContainerClassName='scrollup-btn'
                     TransitionClassName='scrollup-btn__toggled'
                 />
-                <Header/>
+                <Header amountTransposrt={this.state.amountTransposrt} temperature={ this.state.temperature}/>
                 <section>
                     <div className="container">
                         <button type="button" className="btn-map"

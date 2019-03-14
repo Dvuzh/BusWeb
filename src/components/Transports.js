@@ -5,16 +5,16 @@ class Transports extends PureComponent {
     state = {buses: [], trams: [], trolleys: []};
 
     componentDidMount() {
-        fetch('/transports')
-            .then(res =>
-                res.json())
-        // console.log(res));
-        //     .then( (trolleys, trams, buses) => this.setState({trolleys, trams, buses}) );
-            .then((params) => {
-                this.setState({trolleys: params.trolleys});
-                this.setState({trams: params.trams});
-                this.setState({buses: params.buses})
-            });
+        fetch('/transports/buses')
+            .then(res => res.json())
+            .then( buses => this.setState(buses));
+        fetch('/transports/trams')
+            .then(res => res.json())
+            .then(trams => this.setState(trams));
+
+        fetch('/transports/trolleys')
+            .then(res => res.json())
+            .then(trolleys => this.setState(trolleys));
     }
 
     allCars(transports) {
