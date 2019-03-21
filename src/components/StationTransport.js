@@ -15,7 +15,7 @@ function direction(stations, directions = false) {
 class FilterDirection extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             stations: this.props.stations,
             url: this.props.url,
@@ -114,6 +114,15 @@ class StationTransport extends PureComponent {
                 "ДК им. Малунцева", "КДЦ Кристалл", "Технический университет", "Медицинская академия", "СибАДИ", "Арена-Омск (ул. Лукашевича)"],
             countDirections: 1
         };
+    }
+    componentDidMount() {
+        fetch('/transports/position')
+            .then(res => res.json())
+            .then(res => console.log(res));
+
+        // fetch('http://api.your-bus.ru/position?id=105')
+        //     .then(res => res.json())
+        //     .then(res => console.log(res));
     }
 
     render() {
