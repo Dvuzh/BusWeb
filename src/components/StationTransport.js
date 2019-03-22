@@ -1,6 +1,7 @@
 import React, {PureComponent, Component} from "react";
 import {withRouter} from "react-router-dom";
 import ScrollUpButton from "react-scroll-up-button";
+import btnSwitch from '../images/btn-switch.png';
 
 function direction(stations, directions = false) {
     let modStations = stations;
@@ -12,8 +13,20 @@ function direction(stations, directions = false) {
     return filteredStations;
 }
 
-class FilterDirection extends Component {
+const ListStations = (props) => {
+    return (
+        <div>
+            <div>
+                <span className="station-first-last">{props.first} -<br/> {props.end}</span>
+                <br/>
+            </div>
+            <div className={'hr'}></div>
+            <FilteredStations listStation={props.listStation}/>
+        </div>
+    );
+}
 
+class FilterDirection extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,37 +49,23 @@ class FilterDirection extends Component {
         if (countDirection === 0) {
             button =
                 <div className="directions directions-one">
-                    <div>
+                    <div className={'directions-header'}>
                         <span
                             className="station-first-last">{reverseStations[0]} -<br/> {reverseStations[reverseStations.length - 1]}</span>
-                        <br/>
                         <button className="btn-switch" onClick={() => {
                             this.setState({reverseStations: [...reverseStations].reverse()});
-                        }}> switch
+                        }}>
+                            <img src={btnSwitch} className="img-switch" alt=""/>
                         </button>
                     </div>
+                    <div className={'hr'}></div>
                     <FilteredStations listStation={direction(reverseStations, true)}/>
                 </div>
         } else {
             button =
                 <div className="directions directions-two">
-                    <div>
-                        <div>
-                            <span
-                                className="station-first-last">{stations[0]} -<br/> {stations[stations.length - 1]}</span>
-                            <br/>
-                        </div>
-                        <FilteredStations listStation={stationOne}/>
-                    </div>
-
-                    <div>
-                        <div>
-                            <span
-                                className="station-first-last">{stations[stations.length - 1]} -<br/> {stations[0]}</span>
-                            <br/>
-                        </div>
-                        <FilteredStations listStation={stationTwo}/>
-                    </div>
+                    <ListStations first={stations[0]} end={stations[stations.length - 1]} listStation={stationOne}/>
+                    <ListStations first={stations[stations.length - 1]} end={stations[0]} listStation={stationTwo}/>
                 </div>
         }
 
@@ -115,15 +114,12 @@ class StationTransport extends PureComponent {
             countDirections: 1
         };
     }
-    componentDidMount() {
-        fetch('/transports/position')
-            .then(res => res.json())
-            .then(res => console.log(res));
 
-        // fetch('http://api.your-bus.ru/position?id=105')
-        //     .then(res => res.json())
-        //     .then(res => console.log(res));
-    }
+    // componentDidMount() {
+    //     fetch('/transports/position')
+    //         .then(res => res.json())
+    //         .then(res => console.log(res));
+    // }
 
     render() {
         const {buildStationsList} = this.state;

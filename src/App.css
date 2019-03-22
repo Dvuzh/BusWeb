@@ -15,6 +15,10 @@ section {
     padding: 30px;
 }
 
+.container.header{
+    background: #f5f5f5;
+}
+
 .btn-map {
     color: white;
     background: #f65152;
@@ -42,16 +46,13 @@ section {
     color: #999;
     padding: 12px 22px;
     cursor: default;
+    text-decoration: none;
 }
 
 .list-transport li.active {
     background: #f65152;
     color: white;
 }
-
-/*.list-transport li.active a {*/
-    /*color: white;*/
-/*}*/
 
 ul li:first-child, .selected-transport .titlebar .list-transport a:first-child, button.btn-left {
     border-top-left-radius: 6px;
@@ -162,13 +163,24 @@ span, p {
 }
 
 .btn-switch {
-    width: 50px;
+    background: #f65152;
+    width: 80px;
     align-self: center;
+    margin-top: 20px;
+    border-radius: 3px;
+    border:none;
+}
+
+.img-switch{
+    width: 30px;
 }
 
 span.station-first-last {
-    align-self: center;
     color: #f65152;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
 }
 
 .list-station ul {
@@ -211,6 +223,24 @@ span.gray-title{
 .scrollup-btn__toggled{
     opacity: 0.5 !important;
 }
+
+.selected-transport .red-title{
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.hr{
+    border-bottom: 1px solid #ddd;
+    margin: 35px;
+    /*width: 100%;*/
+}
+
+.directions-header{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 
 @keyframes App-logo-spin {
     from {

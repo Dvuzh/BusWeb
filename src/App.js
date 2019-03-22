@@ -58,9 +58,9 @@ class App extends PureComponent {
                 <section>
                     <div className="container">
                         <button type="button" className="btn-map"
-                                onClick={() => this.setState({isMapVisible: !this.state.isMapVisible})}> Карта
+                                onClick={() => this.setState({isMapVisible: !this.state.isMapVisible})}> Где я
                         </button>
-                        {this.state.isMapVisible && <MapY/>}
+                        {this.state.isMapVisible && <MapY />}
                     </div>
                 </section>
                 <FilterTransports updateData={this.updateData}/>

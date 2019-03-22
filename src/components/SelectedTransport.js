@@ -25,7 +25,7 @@ class SelectedTransport extends PureComponent {
         return (
             <div className="selected-transport">
                 <section>
-                    <div className="container">
+                    <div className="container header">
                         <div className="titlebar">
                                   <span
                                       className="red-title">{car.type === 0 ? 'Автобус ' : car.type === 1 ? 'Трамвай ' : 'Троллейбус '}
@@ -47,7 +47,7 @@ class SelectedTransport extends PureComponent {
 
 
                 <Route path="/route/:transportId/station" component={StationTransport}/>
-                <Route path="/route/:transportId/map" component={MapY}/>
+                <Route path="/route/:transportId/map" component={MapY} isMap={1} />
             </div>
         );
     }

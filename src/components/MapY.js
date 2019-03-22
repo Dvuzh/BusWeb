@@ -1,9 +1,18 @@
 import React, {Component} from "react";
 import {YMaps, Map, Placemark, Polyline} from 'react-yandex-maps';
-import bus_now from '../images/bus_now.png';
-import styled from 'styled-components';
+// import bus_now from '../images/bus_now.png';
+// import styled from 'styled-components';
+
+
 
 const mapState = {center: [54.9924400, 73.3685900], zoom: 11, controls: []};
+// const createTemplateLayoutFactory = ymaps => {
+//         console.log(ymaps)
+//         if (ymaps ) {
+//             console.log('tut')
+//                const template =  this.props.ymaps.templateLayoutFactory.createClass('<div class="placemark_layout_container"><div class="square_layout">$</div></div>');
+//         }
+//     }
 const ContactMap = (props) => {
     return (
         <YMaps>
@@ -27,75 +36,109 @@ const ContactMap = (props) => {
         </YMaps>
     );
 };
+
+const setAutoCenter = (ymaps, map) => {
+    ymaps.geolocation.get({
+        provider: 'browser',
+        mapStateAutoApply: true
+    }).then(function (result) {
+        result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+        map.geoObjects.add(result.geoObjects);
+    });
+};
+
+const GeolocationMap = () => {
+    let map = null;
+    return (
+        <YMaps >
+            <Map state={mapState} width="100%" height="500px"  modules={['geolocation']} onLoad={ymaps => setAutoCenter(ymaps, map)} instanceRef={ref => map = ref} />
+        </YMaps>
+    );
+};
+
 class MapY extends Component {
     state = {
+        template: null,
         placemarks: [],
-        routes: []
+        routes: [],
+        transportId: 0,
+        timerId: 0,
     };
 
-   componentDidMount() {
+    getPosition() {
+        fetch(`/transports/position/${this.state.transportId}`)
+            .then(result => result.json())
+            .then(results => {
+                let placemarks = [];
 
-        setInterval(() => {
-            fetch('/transports/position')
-                .then(result => result.json())
-                .then(results => {
-                    let placemarks = [];
-                    results.position.map(result => {
-                        result.map(item => {
-                            placemarks.push({
-                                geometry: {
-                                    type: 'Point',
-                                    coordinates: [item.latitude, item.longitude]
-                                },
-                                options: {
-                                    iconLayout: 'default#image',
-                                    // iconLayout: this.context.ymaps.templateLayoutFactory.createClass([
-                                    //     '<div style="transform:rotate({{options.rotate}}deg);">',
-                                    //     '{% include "default#image" %}',
-                                    //     '</div>'
-                                    // ].join('')),
-                                    // iconRotate: 90,
-                                    iconImageHref: bus_now,
-                                    iconImageSize: [20, 20],
-                                    iconImageOffset: [-10, -10],
-                                    // transform: '90deg'
-                                    // iconRotate: 180
-                                }
-                            });
+                results.position.forEach(result => {
+                    result.forEach(item => {
+                        placemarks.push({
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [item.latitude, item.longitude]
+                            },
+                            options: {
+                                // iconLayout: 'default#image',
+                                // iconImageHref: bus_now,
+                                preset: 'islands#blueMassTransitCircleIcon',
+                                iconColor: '#f65152',
+                                iconImageSize: [20, 20],
+                                iconImageOffset: [-10, -10],
+
+                            }
                         });
                     });
-                    this.setState({placemarks});
                 });
-
-        }, 15000);
-
-
-
-        fetch('/transports/route-transport')
-            .then(result => result.json())
-            .then((result) => {
-                let routes = [];
-                result.line.map(items => {
-                    const directions = items.data.map(item => {
-                        return [item.latitude, item.longitude];
-                    });
-                    routes.push({ directions });
-                });
-                this.setState({routes});
+                this.setState({placemarks});
             });
     }
 
-    render() {
+    componentWillMount() {
+        this.setState({transportId: !!this.props.match ? this.props.match.params.transportId : 0});
+    }
 
+    componentWillUnmount() {
+        clearInterval(this.state.timerId);
+    }
+
+    componentDidMount() {
+        if (this.state.transportId > 0) {
+            this.getPosition();
+
+            let timerId = setInterval(() => {
+                this.getPosition();
+            }, 15000);
+
+            this.setState({timerId});
+
+            fetch(`/transports/route-transport/${this.state.transportId}`)
+                .then(result => result.json())
+                .then((result) => {
+                    let routes = [];
+                    result.line.forEach(items => {
+                        const directions = items.data.map(item => {
+                            return [item.latitude, item.longitude];
+                        });
+                        routes.push({directions});
+                    });
+                    this.setState({routes});
+                });
+        }
+    }
+
+    render() {
         return (
             <section>
                 <div className="container">
-                    <ContactMap placemarks={this.state.placemarks} routes={this.state.routes}/>
+                    {this.state.transportId > 0 &&
+                    <ContactMap placemarks={this.state.placemarks} routes={this.state.routes}/>}
+                    {this.state.transportId === 0 &&
+                    <GeolocationMap/>}
                 </div>
             </section>
         );
     }
 }
-
 
 export default MapY;
