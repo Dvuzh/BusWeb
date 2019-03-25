@@ -3,11 +3,19 @@ import {withRouter} from "react-router-dom";
 import ScrollUpButton from "react-scroll-up-button";
 import btnSwitch from '../images/btn-switch.png';
 
+import busOnLine from "../images/bus_on_line.png";
+// import line from "../images/stationline.png";
+import styled from 'styled-components';
+
 function direction(stations, directions = false) {
     let modStations = stations;
     modStations = directions ? modStations : [...modStations].reverse();
     const filteredStations = modStations.map((item, index) => {
-        return <li key={index}>{item}</li>;
+        return <tr key={index}>
+            <td> <img src={busOnLine}  className="station-line" alt=""/></td>
+            <td> {item}</td>
+
+        </tr>;
     });
 
     return filteredStations;
@@ -24,7 +32,7 @@ const ListStations = (props) => {
             <FilteredStations listStation={props.listStation}/>
         </div>
     );
-}
+};
 
 class FilterDirection extends Component {
     constructor(props) {
@@ -94,14 +102,29 @@ class FilterDirection extends Component {
 }
 
 const FilteredStations = (props) => {
+    const StyledTr = styled.tr`  
+  display: flex;
+  justify-content: center;
+  `;
+    const StyledTd= styled.td`
+    color:red;
+    `;
+
     return (
-        <div className="list-station">
-            <ul>
+        <table className="list-station">
+            <tbody >
+            <StyledTr>
+                <td>В данном направлении</td>
+                <StyledTd> (3)ед. </StyledTd>
+            </StyledTr>
                 {props.listStation}
-            </ul>
-        </div>
+            </tbody>
+        </table>
+
     );
 };
+
+
 
 class StationTransport extends PureComponent {
     constructor(props) {
@@ -111,20 +134,76 @@ class StationTransport extends PureComponent {
                 "Карьер (ул. Загородная)", "Поворот (ул. Загородная)", "проспект Мира (по требованию)", "Завод Металлист", "ЗСЖБ-5", "Магазин (проспект Мира)",
                 "Микрорайон Юбилейный", "Радиостанция", "Социальный рынок (проспект Мира)", "ДОК (проспект Мира)", "Магазин Садко", "ОмГУ", "Нефтезаводская",
                 "ДК им. Малунцева", "КДЦ Кристалл", "Технический университет", "Медицинская академия", "СибАДИ", "Арена-Омск (ул. Лукашевича)"],
-            countDirections: 1
+            countDirections: 1,
+            // transportId: 0,
+            // countAll: 0
         };
+        // let timerId = 0;
     }
 
+// componentWillMount() {
+//         this.setState({transportId : this.props.match.params.transportId})
+// }
+
+
+
     // componentDidMount() {
-    //     fetch('/transports/position')
-    //         .then(res => res.json())
-    //         .then(res => console.log(res));
+    //
+    //     this.getPosition();
     // }
+    //
+    // componentWillUnmount() {
+    //     clearTimeout(this.timerId);
+    // };
+    //
+    // getPosition() {
+    //     fetch(`/transports/position/${this.state.transportId}`)
+    //         .then(result => result.json())
+    //         .then(results => {
+    //
+    //
+    //             const countAll = results.count.reduce((sum, current) => parseInt(sum) + parseInt(current));
+    //             console.log(countAll);
+    //             this.setState(countAll);
+    //             // let placemarks = [];
+    //             // results.position.forEach(result => {
+    //             //     result.forEach(item => {
+    //             //         placemarks.push({
+    //             //             geometry: {
+    //             //                 type: 'Point',
+    //             //                 coordinates: [item.latitude, item.longitude]
+    //             //             },
+    //             //             options: {
+    //             //                 // iconLayout: 'default#image',
+    //             //                 // iconImageHref: bus_now,
+    //             //                 preset: 'islands#blueMassTransitCircleIcon',
+    //             //                 iconColor: '#f65152',
+    //             //                 iconImageSize: [20, 20],
+    //             //                 iconImageOffset: [-10, -10],
+    //             //
+    //             //             }
+    //             //         });
+    //             //     });
+    //             // });
+    //             // this.setState({placemarks});
+    //
+    //             this.timerId = setTimeout(() => {
+    //                                 this.getPosition()
+    //                             }, 15000);
+    //         });
+    // }
+
 
     render() {
         const {buildStationsList} = this.state;
         const currentUrl = this.props.match.url;
-
+console.log(this.props.children)
+        // React.Children.map(children => {
+        //     console.log(children)
+        // })
+//         var childrenWithProps = React.cloneElement(this.props.children);
+//
+// console.log(childrenWithProps)
         return (
             <div className="content-current-transport">
                 <ScrollUpButton

@@ -34,6 +34,9 @@ class App extends PureComponent {
     updateData = (value) => {
         this.setState({filter: value});
     };
+    updateCountAll =(value) =>{
+        this.setState({amountTransposrt : value})
+    };
     componentDidMount() {
         fetch('/transports/amount')
             .then(res => res.json())
@@ -64,7 +67,7 @@ class App extends PureComponent {
                     </div>
                 </section>
                 <FilterTransports updateData={this.updateData}/>
-                <Transports filter={this.state.filter}/>
+                <Transports filter={this.state.filter} updateCountAll={this.updateCountAll}/>
 
             </div>
         );

@@ -1,13 +1,30 @@
 import React, {PureComponent} from "react";
 import CurrentTransport from "./CurrentTransport";
 
+function updateTransport(transports, res) {
+    let updateArray = transports;
+    updateArray.map(element => {
+        const currentCountTransport = res.filter(item => item.id == element.id);
+
+        currentCountTransport.forEach(el => {
+            if (el.direction == 0)
+                element.directionOne = parseInt(el.on_route_count);
+            if (el.direction == 1)
+                element.directionTwo = parseInt(el.on_route_count);
+        });
+    });
+    return updateArray;
+}
+
+let timerId = 0;
+
 class Transports extends PureComponent {
     state = {buses: [], trams: [], trolleys: []};
 
     componentDidMount() {
         fetch('/transports/buses')
             .then(res => res.json())
-            .then( buses => this.setState(buses));
+            .then(buses => this.setState(buses));
         fetch('/transports/trams')
             .then(res => res.json())
             .then(trams => this.setState(trams));
@@ -15,6 +32,32 @@ class Transports extends PureComponent {
         fetch('/transports/trolleys')
             .then(res => res.json())
             .then(trolleys => this.setState(trolleys));
+
+        this.updateCountTransports();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(timerId);
+    };
+
+    updateCountTransports() {
+        fetch('/transports/countall')
+            .then(res => res.json())
+            .then(res => {
+                const buses = updateTransport(this.state.buses, res);
+                const trams = updateTransport(this.state.trams, res);
+                const trolleys = updateTransport(this.state.trolleys, res);
+
+                this.setState(buses);
+                this.setState(trams);
+                this.setState(trolleys);
+
+                const countAll = res.map(el => el.on_route_count).reduce((sum, current) => parseInt(sum) + parseInt(current));
+                this.props.updateCountAll(countAll);
+                timerId = setTimeout(() => {
+                    this.updateCountTransports()
+                }, 15000);
+            });
     }
 
     allCars(transports) {
@@ -32,7 +75,7 @@ class Transports extends PureComponent {
     }
 
     render() {
-        const transports = [this.state.buses, this.state.trams, this.state.trolleys];  //{buses: [...this.state.buses], trams : [...this.state.trams]} ;
+        const transports = [this.state.buses, this.state.trams, this.state.trolleys];
         const allCars = this.allCars(transports);
 
         return (
