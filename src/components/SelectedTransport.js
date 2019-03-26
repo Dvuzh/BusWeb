@@ -4,6 +4,7 @@ import {Link, Route, NavLink, withRouter} from "react-router-dom";
 
 import MapY from "./MapY";
 import StationTransport from "./StationTransport";
+import {connect} from "react-redux";
 
 class SelectedTransport extends Component {
     constructor(props){
@@ -11,34 +12,44 @@ class SelectedTransport extends Component {
         this.state = {
             car : {},
         };
-        let timerId = 0;
+        // let timerId = 0;
     }
 
     componentDidMount() {
         fetch(`/transports/${this.props.match.params.transportId}`,{ method: 'POST'})
             .then(result => result.json())
-            .then(car => this.setState(car));
+            .then(car => { this.setState(car); this.AddTransport(car.car);});
 
         this.getPosition();
+    }
+
+    AddTransport(car) {
+        // console.log('AddTransport', car);
+        this.props.onAddTransport(car);
     }
 
     componentWillUnmount() {
         clearTimeout(this.timerId);
     };
 
-    getPosition() {
+    // componentWillUpdate(){
+    //     this.AddTransport();
+    // };
 
+    getPosition() {
         fetch(`/transports/position/${this.props.match.params.transportId}`)
             .then(result => result.json())
             .then(results => {
                 // const countAll = results.count.reduce((sum, current) => parseInt(sum) + parseInt(current));
 
                 let {car} = this.state;
-                car.directionOne = results.count[0];
-                car.directionTwo = results.count[1];
 
-                this.setState({car});
-
+                if(parseInt(results.count[0]) !== car.directionOne || parseInt(results.count[1]) !== car.directionTwo){
+                    car.directionOne = parseInt(results.count[0]);
+                    car.directionTwo = parseInt(results.count[1]);
+                    this.setState({car});
+                    this.AddTransport(car);
+                }
 
                 this.timerId = setTimeout(() => {
                     this.getPosition()
@@ -73,11 +84,20 @@ class SelectedTransport extends Component {
                 </section>
 
 
-                <Route path="/route/:transportId/station" component={StationTransport} car={car}/>
+                <Route path="/route/:transportId/station" component={StationTransport}/>
                 <Route path="/route/:transportId/map" component={MapY} isMap={1} />
             </div>
         );
     }
 }
 
-export default withRouter(SelectedTransport);
+export default connect(
+    state => ({
+        transport: state.transport
+    }),
+    dispatch => ({
+        onAddTransport: (transport) => {
+            dispatch({ type: 'ADD_TRANSPORT', transport: transport });
+        }
+    })
+)(withRouter(SelectedTransport));

@@ -6,6 +6,7 @@ import btnSwitch from '../images/btn-switch.png';
 import busOnLine from "../images/bus_on_line.png";
 // import line from "../images/stationline.png";
 import styled from 'styled-components';
+import {connect} from "react-redux";
 
 function direction(stations, directions = false) {
     let modStations = stations;
@@ -29,7 +30,7 @@ const ListStations = (props) => {
                 <br/>
             </div>
             <div className={'hr'}></div>
-            <FilteredStations listStation={props.listStation}/>
+            <FilteredStations listStation={props.listStation} countTransport={props.countTransport} />
         </div>
     );
 };
@@ -41,11 +42,13 @@ class FilterDirection extends Component {
             stations: this.props.stations,
             url: this.props.url,
             countDirection: 0,
-            reverseStations: this.props.stations
+            reverseStations: this.props.stations,
+            car: this.props.transport
         }
     }
 
     render() {
+        // console.log(this.props.transport)
         const {stations} = this.state;
         const {reverseStations} = this.state;
         const {countDirection} = this.state;
@@ -67,13 +70,14 @@ class FilterDirection extends Component {
                         </button>
                     </div>
                     <div className={'hr'}></div>
-                    <FilteredStations listStation={direction(reverseStations, true)}/>
+                    <FilteredStations listStation={direction(reverseStations, true)}
+                                      countTransport={ stations[0] === reverseStations[0] ? this.props.transport.directionOne : this.props.transport.directionTwo}/>
                 </div>
         } else {
             button =
                 <div className="directions directions-two">
-                    <ListStations first={stations[0]} end={stations[stations.length - 1]} listStation={stationOne}/>
-                    <ListStations first={stations[stations.length - 1]} end={stations[0]} listStation={stationTwo}/>
+                    <ListStations first={stations[0]} end={stations[stations.length - 1]} listStation={stationOne} countTransport={this.props.transport.directionOne}/>
+                    <ListStations first={stations[stations.length - 1]} end={stations[0]} listStation={stationTwo} countTransport={this.props.transport.directionTwo}/>
                 </div>
         }
 
@@ -101,7 +105,7 @@ class FilterDirection extends Component {
     }
 }
 
-const FilteredStations = (props) => {
+const FilteredStations = (properties) => {
     const StyledTr = styled.tr`  
   display: flex;
   justify-content: center;
@@ -109,15 +113,17 @@ const FilteredStations = (props) => {
     const StyledTd= styled.td`
     color:red;
     `;
+    // console.log(props)
 
     return (
         <table className="list-station">
             <tbody >
             <StyledTr>
-                <td>В данном направлении</td>
-                <StyledTd> (3)ед. </StyledTd>
+                <td>В данном направлении  </td>
+                <StyledTd> ({properties.countTransport})ед. </StyledTd>
             </StyledTr>
-                {props.listStation}
+
+                {properties.listStation}
             </tbody>
         </table>
 
@@ -135,15 +141,15 @@ class StationTransport extends PureComponent {
                 "Микрорайон Юбилейный", "Радиостанция", "Социальный рынок (проспект Мира)", "ДОК (проспект Мира)", "Магазин Садко", "ОмГУ", "Нефтезаводская",
                 "ДК им. Малунцева", "КДЦ Кристалл", "Технический университет", "Медицинская академия", "СибАДИ", "Арена-Омск (ул. Лукашевича)"],
             countDirections: 1,
-            // transportId: 0,
-            // countAll: 0
+            transport: {}
+
         };
         // let timerId = 0;
     }
 
-// componentWillMount() {
-//         this.setState({transportId : this.props.match.params.transportId})
-// }
+    componentWillUpdate() {
+        this.setState({transport : this.props.transport})
+    }
 
 
 
@@ -195,15 +201,12 @@ class StationTransport extends PureComponent {
 
 
     render() {
+        // console.log('car', this.state.car)
+        // console.log('transport',this.props.transport);
+
         const {buildStationsList} = this.state;
         const currentUrl = this.props.match.url;
-console.log(this.props.children)
-        // React.Children.map(children => {
-        //     console.log(children)
-        // })
-//         var childrenWithProps = React.cloneElement(this.props.children);
-//
-// console.log(childrenWithProps)
+
         return (
             <div className="content-current-transport">
                 <ScrollUpButton
@@ -214,10 +217,19 @@ console.log(this.props.children)
                     TransitionClassName='scrollup-btn__toggled'
                 />
                 <FilterDirection url={currentUrl} stations={buildStationsList}
-                                 countDirections={this.state.countDirections}/>
+                                 countDirections={this.state} transport={this.props.transport}/>
             </div>
         );
     }
 }
 
-export default withRouter(StationTransport);
+export default connect(
+    state => ({
+        transport: state.transport
+    }),
+    dispatch => ({
+        onAddTransport: (transport) => {
+            dispatch({ type: 'ADD_CAR', transport: transport });
+        }
+    })
+)(withRouter(StationTransport));
