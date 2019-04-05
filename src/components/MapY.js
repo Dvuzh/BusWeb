@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {YMaps, Map, Placemark, Polyline} from 'react-yandex-maps';
+import bus_station from "../images/map_bus_station.png"
+
 // import bus_now from '../images/bus_now.png';
 // import styled from 'styled-components';
-
 
 
 const mapState = {center: [54.9924400, 73.3685900], zoom: 11, controls: []};
@@ -16,7 +17,30 @@ const mapState = {center: [54.9924400, 73.3685900], zoom: 11, controls: []};
 const ContactMap = (props) => {
     return (
         <YMaps>
-            <Map state={mapState} width="100%" height="500px">
+            <Map state={mapState} width="100%" height="500px"
+                 modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}>
+
+                {props.stations.length !== 0 &&
+                props.stations.map((direction, i) =>
+                    direction.map((station, index) =>
+                        <Placemark key={index}
+                                   geometry={[station.latitude, station.longitude]}
+
+                                   properties={{
+                                       balloonContentHeader: "Остановка",
+                                       balloonContentBody: station.name,
+                                       // hintContent: "Хинт метки"
+                                   }}
+                                   options={{
+                                       iconLayout: 'default#image',
+                                       iconImageHref: bus_station,
+                                       iconImageSize: [20, 20],
+                                       iconImageOffset: [-15, -15],
+                                   }}
+                        />
+                    )
+                )}
+
                 {props.placemarks.length !== 0 && props.placemarks.map((placemarkParams, i) =>
                     <Placemark key={i} {...placemarkParams} />
                 )}
@@ -25,7 +49,6 @@ const ContactMap = (props) => {
                     <Polyline key={i}
                               geometry={[...routes.directions]}
                               options={{
-                                  balloonCloseButton: false,
                                   strokeColor: '#0000ff',
                                   strokeWidth: 2,
                                   strokeOpacity: 0.9,
@@ -50,8 +73,9 @@ const setAutoCenter = (ymaps, map) => {
 const GeolocationMap = () => {
     let map = null;
     return (
-        <YMaps >
-            <Map state={mapState} width="100%" height="500px"  modules={['geolocation']} onLoad={ymaps => setAutoCenter(ymaps, map)} instanceRef={ref => map = ref} />
+        <YMaps>
+            <Map state={mapState} width="100%" height="500px" modules={['geolocation']}
+                 onLoad={ymaps => setAutoCenter(ymaps, map)} instanceRef={ref => map = ref}/>
         </YMaps>
     );
 };
@@ -63,6 +87,7 @@ class MapY extends Component {
         routes: [],
         transportId: 0,
         timerId: 0,
+        stations: [],
     };
 
     getPosition() {
@@ -115,6 +140,7 @@ class MapY extends Component {
             fetch(`/transports/route-transport/${this.state.transportId}`)
                 .then(result => result.json())
                 .then((result) => {
+                    // console.log(result)
                     let routes = [];
                     result.line.forEach(items => {
                         const directions = items.data.map(item => {
@@ -122,7 +148,12 @@ class MapY extends Component {
                         });
                         routes.push({directions});
                     });
+
+                    let stations = result.station.map(items => {
+                        return items.map(item => item);
+                    });
                     this.setState({routes});
+                    this.setState({stations});
                 });
         }
     }
@@ -132,7 +163,8 @@ class MapY extends Component {
             <section>
                 <div className="container">
                     {this.state.transportId > 0 &&
-                    <ContactMap placemarks={this.state.placemarks} routes={this.state.routes}/>}
+                    <ContactMap placemarks={this.state.placemarks} routes={this.state.routes}
+                                stations={this.state.stations}/>}
                     {this.state.transportId === 0 &&
                     <GeolocationMap/>}
                 </div>

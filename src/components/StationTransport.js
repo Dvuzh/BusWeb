@@ -4,81 +4,155 @@ import ScrollUpButton from "react-scroll-up-button";
 import btnSwitch from '../images/btn-switch.png';
 
 import busOnLine from "../images/bus_on_line.png";
-// import line from "../images/stationline.png";
+import line from "../images/stationline.png";
 import styled from 'styled-components';
 import {connect} from "react-redux";
 
-function direction(stations, directions = false) {
-    let modStations = stations;
-    modStations = directions ? modStations : [...modStations].reverse();
-    const filteredStations = modStations.map((item, index) => {
-        return <tr key={index}>
-            <td> <img src={busOnLine}  className="station-line" alt=""/></td>
-            <td> {item}</td>
+function direction(stations, selectedStation) {
 
-        </tr>;
+    let resultList = [];
+    const StyledTd = styled.td`
+        visibility: visible;
+        opacity: 0.8;    
+        margin-left: 15px;
+        z-index: 999;
+        position: absolute;
+        width: 140px;
+        color: #000000;
+        background: #D5D4FF;
+        text-align: center;
+        border-radius: 6px;
+        box-shadow: 1px 1px 3px #807C71;
+        vertical-align: middle;`;
+    const TransportNotInStation = styled.img`
+        filter: grayscale(100%);
+        transition-property: background-color;
+        transition-duration: 3s;`;
+    const LineTd = styled.td`
+        background: url(${line}) top left repeat-y;
+        width: 32px;`;
+    const AnimateTr = styled.tr`
+        transition-property: background-color;
+        transition-duration: 3s;`;
+
+    stations.forEach((item, index) => {
+
+        let elementNotStation = null;
+        if (selectedStation !== undefined) {
+            elementNotStation = selectedStation.find((element) => element.station_id === item.id.toString());
+            if (elementNotStation) {
+                if (elementNotStation.on_station === "1") {
+                    resultList.push(<tr key={item.id}>
+                        <LineTd><img src={busOnLine} alt=""/></LineTd>
+                        <td>{item.name}</td>
+                    </tr>);
+                } else {
+                    resultList.push(<tr key={item.id}>
+                        <LineTd />
+                        <td> {item.name}</td>
+                    </tr>);
+                    resultList.push(<AnimateTr key={'img' + item.id}>
+                        <LineTd>
+                            <TransportNotInStation src={busOnLine} alt=""/>
+                        </LineTd>
+                        <StyledTd> {Math.round(elementNotStation.dst_next_st, 1) + "м."} </StyledTd>
+                    </AnimateTr>);
+                }
+            } else {
+                resultList.push(<tr key={item.id}>
+                    <LineTd />
+                    <td> {item.name}</td>
+                </tr>);
+            }
+        }
     });
 
-    return filteredStations;
+    return resultList;
 }
 
+
 const ListStations = (props) => {
+
     return (
         <div>
             <div>
-                <span className="station-first-last">{props.first} -<br/> {props.end}</span>
-                <br/>
+                <span
+                    className="station-first-last">{props.listStation[0].name} -<br/> {props.listStation[props.listStation.length - 1].name}</span>
+
+                {props.countDirection === 0 &&
+                <div className={'directions-header'}>
+                    <button className="btn-switch"
+                            onClick={() => {
+                                props.updateData(props.direction === 0 ? 1 : 0)
+                            }}
+                    >
+                        <img src={btnSwitch} className="img-switch" alt=""/>
+                    </button>
+                </div>}
             </div>
             <div className={'hr'}></div>
-            <FilteredStations listStation={props.listStation} countTransport={props.countTransport} />
+            <FilteredStations listStation={direction(props.listStation, props.selectedStation)}
+                              countTransport={props.countTransport}/>
         </div>
     );
 };
 
 class FilterDirection extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            stations: this.props.stations,
-            url: this.props.url,
-            countDirection: 0,
-            reverseStations: this.props.stations,
-            car: this.props.transport
-        }
-    }
+    state = {
+        countDirection: 0,
+        direction: 0
+    };
+
+    updateData = (value) => {
+        this.setState({direction: value});
+    };
 
     render() {
-        // console.log(this.props.transport)
-        const {stations} = this.state;
-        const {reverseStations} = this.state;
         const {countDirection} = this.state;
-
-        const stationOne = direction(stations, true);
-        const stationTwo = direction(stations);
+        const {stations, transport} = this.props;
+        const {routes} = this.props;
+        let stationsId = [];
 
         let button = null;
-        if (countDirection === 0) {
-            button =
-                <div className="directions directions-one">
-                    <div className={'directions-header'}>
-                        <span
-                            className="station-first-last">{reverseStations[0]} -<br/> {reverseStations[reverseStations.length - 1]}</span>
-                        <button className="btn-switch" onClick={() => {
-                            this.setState({reverseStations: [...reverseStations].reverse()});
-                        }}>
-                            <img src={btnSwitch} className="img-switch" alt=""/>
-                        </button>
-                    </div>
-                    <div className={'hr'}></div>
-                    <FilteredStations listStation={direction(reverseStations, true)}
-                                      countTransport={ stations[0] === reverseStations[0] ? this.props.transport.directionOne : this.props.transport.directionTwo}/>
-                </div>
-        } else {
-            button =
-                <div className="directions directions-two">
-                    <ListStations first={stations[0]} end={stations[stations.length - 1]} listStation={stationOne} countTransport={this.props.transport.directionOne}/>
-                    <ListStations first={stations[stations.length - 1]} end={stations[0]} listStation={stationTwo} countTransport={this.props.transport.directionTwo}/>
-                </div>
+        if (Object.keys(stations).length > 0 || Object.keys(routes).length > 0) {
+            if (Object.keys(routes).length > 0) {
+                stationsId = routes.map((route) => {
+                        return route.map(item => {
+                            return {
+                                "station_id": item.station_id,
+                                "on_station": item.on_station,
+                                "dst_next_st": item.dst_next_st
+                            }
+                        })
+                    }
+                );
+            }
+            if (stations.length > 0) {
+                if (countDirection === 0) {
+                    const listStation = stations.filter((station) => station.direction === this.state.direction);
+                    button =
+                        <div className="directions directions-one">
+                            <ListStations listStation={listStation}
+                                          countTransport={this.state.direction === 0 ? transport.directionOne : transport.directionTwo}
+                                          countDirection={countDirection} direction={this.state.direction}
+                                          updateData={this.updateData}
+                                          selectedStation={stationsId[this.state.direction]}
+                            />
+                        </div>
+                } else {
+                    const listStationOne = stations.filter((station) => station.direction === 0);
+                    const listStationTwo = stations.filter((station) => station.direction === 1);
+                    button =
+                        <div className="directions directions-two">
+                            <ListStations listStation={listStationOne}
+                                          countTransport={this.props.transport.directionOne}
+                                          countDirection={countDirection} selectedStation={stationsId[0]}/>
+                            <ListStations listStation={listStationTwo}
+                                          countTransport={this.props.transport.directionTwo}
+                                          countDirection={countDirection} selectedStation={stationsId[1]}/>
+                        </div>
+                }
+            }
         }
 
         return (
@@ -110,20 +184,17 @@ const FilteredStations = (properties) => {
   display: flex;
   justify-content: center;
   `;
-    const StyledTd= styled.td`
+    const StyledTd = styled.td`
     color:red;
     `;
-    // console.log(props)
-
     return (
         <table className="list-station">
-            <tbody >
+            <tbody>
             <StyledTr>
-                <td>В данном направлении  </td>
+                <td>В данном направлении</td>
                 <StyledTd> ({properties.countTransport})ед. </StyledTd>
             </StyledTr>
-
-                {properties.listStation}
+            {properties.listStation}
             </tbody>
         </table>
 
@@ -131,82 +202,8 @@ const FilteredStations = (properties) => {
 };
 
 
-
 class StationTransport extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            buildStationsList: ["пос. Николаевка", "Загородная (по требованию)", "Магазин (ул. Загородная)", "Песчаная",
-                "Карьер (ул. Загородная)", "Поворот (ул. Загородная)", "проспект Мира (по требованию)", "Завод Металлист", "ЗСЖБ-5", "Магазин (проспект Мира)",
-                "Микрорайон Юбилейный", "Радиостанция", "Социальный рынок (проспект Мира)", "ДОК (проспект Мира)", "Магазин Садко", "ОмГУ", "Нефтезаводская",
-                "ДК им. Малунцева", "КДЦ Кристалл", "Технический университет", "Медицинская академия", "СибАДИ", "Арена-Омск (ул. Лукашевича)"],
-            countDirections: 1,
-            transport: {}
-
-        };
-        // let timerId = 0;
-    }
-
-    componentWillUpdate() {
-        this.setState({transport : this.props.transport})
-    }
-
-
-
-    // componentDidMount() {
-    //
-    //     this.getPosition();
-    // }
-    //
-    // componentWillUnmount() {
-    //     clearTimeout(this.timerId);
-    // };
-    //
-    // getPosition() {
-    //     fetch(`/transports/position/${this.state.transportId}`)
-    //         .then(result => result.json())
-    //         .then(results => {
-    //
-    //
-    //             const countAll = results.count.reduce((sum, current) => parseInt(sum) + parseInt(current));
-    //             console.log(countAll);
-    //             this.setState(countAll);
-    //             // let placemarks = [];
-    //             // results.position.forEach(result => {
-    //             //     result.forEach(item => {
-    //             //         placemarks.push({
-    //             //             geometry: {
-    //             //                 type: 'Point',
-    //             //                 coordinates: [item.latitude, item.longitude]
-    //             //             },
-    //             //             options: {
-    //             //                 // iconLayout: 'default#image',
-    //             //                 // iconImageHref: bus_now,
-    //             //                 preset: 'islands#blueMassTransitCircleIcon',
-    //             //                 iconColor: '#f65152',
-    //             //                 iconImageSize: [20, 20],
-    //             //                 iconImageOffset: [-10, -10],
-    //             //
-    //             //             }
-    //             //         });
-    //             //     });
-    //             // });
-    //             // this.setState({placemarks});
-    //
-    //             this.timerId = setTimeout(() => {
-    //                                 this.getPosition()
-    //                             }, 15000);
-    //         });
-    // }
-
-
     render() {
-        // console.log('car', this.state.car)
-        // console.log('transport',this.props.transport);
-
-        const {buildStationsList} = this.state;
-        const currentUrl = this.props.match.url;
-
         return (
             <div className="content-current-transport">
                 <ScrollUpButton
@@ -216,8 +213,7 @@ class StationTransport extends PureComponent {
                     ContainerClassName='scrollup-btn'
                     TransitionClassName='scrollup-btn__toggled'
                 />
-                <FilterDirection url={currentUrl} stations={buildStationsList}
-                                 countDirections={this.state} transport={this.props.transport}/>
+                <FilterDirection {...this.props} />
             </div>
         );
     }
@@ -225,11 +221,13 @@ class StationTransport extends PureComponent {
 
 export default connect(
     state => ({
-        transport: state.transport
+        transport: state.transport,
+        stations: state.stations,
+        routes: state.routes
     }),
     dispatch => ({
         onAddTransport: (transport) => {
-            dispatch({ type: 'ADD_CAR', transport: transport });
+            dispatch({type: 'ADD_CAR', transport: transport});
         }
     })
 )(withRouter(StationTransport));

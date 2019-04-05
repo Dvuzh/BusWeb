@@ -7,9 +7,9 @@ function updateTransport(transports, res) {
         const currentCountTransport = res.filter(item => item.id == element.id);
 
         currentCountTransport.forEach(el => {
-            if (el.direction == 0)
+            if (el.direction === "0")
                 element.directionOne = parseInt(el.on_route_count);
-            if (el.direction == 1)
+            if (el.direction === "1")
                 element.directionTwo = parseInt(el.on_route_count);
         });
     });
