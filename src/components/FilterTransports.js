@@ -1,6 +1,13 @@
 import React, {PureComponent} from "react";
 
 class FilterTransports extends PureComponent {
+    // alex: маленький хак инициализации стейта в классе, и тогда конструктор не нужен
+    /*
+    state = {
+        activeClasses: [true, false, false, false], filter: -1
+    };
+    */
+
     constructor(props) {
         super(props);
         this.state = {activeClasses: [true, false, false, false], filter: -1};
@@ -18,6 +25,7 @@ class FilterTransports extends PureComponent {
             <section>
                 <div className="container">
                     <ul className="list-transport">
+                    {/* alex: здесь напрашивается map */}
                         <li className={activeClasses[0]? "active" : ""} onClick={() => this.addActiveClass(0)} >
                             Все
                         </li>

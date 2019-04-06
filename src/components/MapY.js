@@ -14,12 +14,19 @@ const mapState = {center: [54.9924400, 73.3685900], zoom: 11, controls: []};
 //                const template =  this.props.ymaps.templateLayoutFactory.createClass('<div class="placemark_layout_container"><div class="square_layout">$</div></div>');
 //         }
 //     }
+
+// alex: здесь очень много больших компонентов в одном файле, было бы удобнее их в разные файлы и в папочку maps, например
 const ContactMap = (props) => {
+    /*
+    alex: 
+
+    сonst { stations, direction } = props;
+    */
     return (
         <YMaps>
             <Map state={mapState} width="100%" height="500px"
                  modules={['geoObject.addon.balloon', 'geoObject.addon.hint']}>
-
+                {/* alex: просто props.stations.length, 0 -- это falsy value */}
                 {props.stations.length !== 0 &&
                 props.stations.map((direction, i) =>
                     direction.map((station, index) =>
@@ -91,6 +98,7 @@ class MapY extends Component {
     };
 
     getPosition() {
+        // alex: фетч лучше в санки, и используй async/await.
         fetch(`/transports/position/${this.state.transportId}`)
             .then(result => result.json())
             .then(results => {
