@@ -226,6 +226,7 @@ export default connect(
         routes: state.routes
     }),
     dispatch => ({
+        // alex: а зачем этот метод здесь?
         onAddTransport: (transport) => {
             dispatch({type: 'ADD_CAR', transport: transport});
         }

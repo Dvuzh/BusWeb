@@ -86,7 +86,7 @@ const GeolocationMap = () => {
         </YMaps>
     );
 };
-
+// alex: PureComponent
 class MapY extends Component {
     state = {
         template: null,
@@ -98,7 +98,7 @@ class MapY extends Component {
     };
 
     getPosition() {
-        // alex: фетч лучше в санки, и используй async/await.
+        // alex: фетч лучше в санки, и используй async/await, then уже не модно
         fetch(`/transports/position/${this.state.transportId}`)
             .then(result => result.json())
             .then(results => {
@@ -144,7 +144,7 @@ class MapY extends Component {
             }, 15000);
 
             this.setState({timerId});
-
+// alex: угадай коммент :D
             fetch(`/transports/route-transport/${this.state.transportId}`)
                 .then(result => result.json())
                 .then((result) => {
@@ -171,8 +171,10 @@ class MapY extends Component {
             <section>
                 <div className="container">
                     {this.state.transportId > 0 &&
-                    <ContactMap placemarks={this.state.placemarks} routes={this.state.routes}
-                                stations={this.state.stations}/>}
+                    (<ContactMap placemarks={this.state.placemarks} 
+                                routes={this.state.routes}
+                                stations={this.state.stations}
+                    />)}
                     {this.state.transportId === 0 &&
                     <GeolocationMap/>}
                 </div>

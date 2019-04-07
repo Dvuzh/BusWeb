@@ -10,6 +10,8 @@ class FilterTransports extends PureComponent {
 
     constructor(props) {
         super(props);
+        // alex: зачем так? почему не создать Set индексов активных фильтров?
+        // + я не очень понимаю, на что в компоненте влияет filter
         this.state = {activeClasses: [true, false, false, false], filter: -1};
     }
 
@@ -18,6 +20,23 @@ class FilterTransports extends PureComponent {
         this.setState({activeClasses});
         this.props.updateData(index - 1)
     }
+
+    /* alex: 
+    selectFilter = index => this.addActiveClass(index)
+
+    ...
+    вне класса:
+    const FILTERS = ['Все', 'Автобусы', ...]
+    ...
+    в рендере:
+    {
+        FILTERS.map((title, index) => (
+        <li className={activeClasses[index]? "active" : ""} onClick={() => selectFilter(index)}>
+            {title}
+        </li>
+        ))
+    }
+    */
 
     render() {
         const activeClasses = this.state.activeClasses;
