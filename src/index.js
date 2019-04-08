@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import reducer from './store/reducers';
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.baseURL = (process.env.NODE_ENV !== 'production') ? 'http://localhost:3001' : 'http://bus.dextudio.com:3001' ;
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
