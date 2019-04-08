@@ -8,6 +8,9 @@ import Transports from "./components/Transports";
 import ScrollUpButton from "react-scroll-up-button";
 import axios from "axios";
 
+// alex: вынесла бы в отдельный файл, вообще бы реорганизовала бы компоненты по папкам.
+// например heaher/Header.js 
+// + добавила бы Header.styles.js где настроила бы стили взамен использования css-классов
 function Header(props) {
     return (
         <section>
@@ -29,7 +32,9 @@ function Header(props) {
     );
 }
 
+// alex: за PureComponent молодец ^_^
 class App extends PureComponent {
+    // alex: amountTransposrt: 0, temperature : 0 -- можно хранить в сторе
     state = {filter: -1, isMapVisible: false, amountTransposrt: 0, temperature : 0};
 
     updateData = (value) => {
@@ -39,10 +44,16 @@ class App extends PureComponent {
         this.setState({amountTransposrt : value})
     };
     componentDidMount() {
-        axios.get('/transports/amount')
-            .then(res => res.data)
+
+        // в thunk. 
+            axios.get('/transports/amount')
+                .then(res => res.data)
             .then(amountTransposrt => this.setState(amountTransposrt));
 
+        // alex: вот такая штука говорит о том, что где-то что-то пошло не так...
+        // temperature.temperature.main.temp, потому что компоненту должно быть фиолетово, 
+        // как там другой сервис данные ему отправляет, ему надо тупо получить пропс,
+        // если что, то это должно максимум в service обрабатыватся или в санке
         axios.get('/weather/search-location-weather')
             .then(res => res.data)
             .then((temperature) => {this.setState( {temperature : temperature.temperature.main.temp})});
@@ -62,6 +73,7 @@ class App extends PureComponent {
                 <section>
                     <div className="container">
                         <button type="button" className="btn-map"
+                                /* alex: давай в метод класса?) handleClick */
                                 onClick={() => this.setState({isMapVisible: !this.state.isMapVisible})}> Где я
                         </button>
                         {this.state.isMapVisible && <MapY />}

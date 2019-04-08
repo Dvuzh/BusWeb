@@ -6,7 +6,14 @@ import MapY from "./MapY";
 import StationTransport from "./StationTransport";
 import {connect} from "react-redux";
 
+// alex: PureComponent
 class SelectedTransport extends Component {
+    /* alex:
+    state = {
+        car: {}
+    }
+    */
+
     constructor(props) {
         super(props);
         this.state = {
@@ -15,6 +22,7 @@ class SelectedTransport extends Component {
     }
 
     componentDidMount() {
+        // alex: не здесь
         fetch(`/transports/${this.props.match.params.transportId}`, {method: 'POST'})
             .then(result => result.json())
             .then(car => {
@@ -93,6 +101,7 @@ class SelectedTransport extends Component {
 
 export default connect(
     state => ({
+        // alex: а зачем тебе здесь эти данные из стора если в компоненте SelectedTransport ты их не используешь?
         transport: state.transport,
         stations: state.stations
     }),
@@ -108,3 +117,20 @@ export default connect(
         }
     })
 )(withRouter(SelectedTransport));
+
+/* alex: some kind of magic
+export default connect(
+    state => ({
+        transport: state.transport,
+        stations: state.stations
+    }),
+    dispatch => ({
+        onAddTransport: transport => dispatch({type: 'ADD_TRANSPORT', transport}),
+        onAddStations: stations => dispatch({type: 'ADD_STATIONS', stations}),
+        onAddRoutes: routes => dispatch({type: 'ADD_ROUTES', routes})
+    })
+)(withRouter(SelectedTransport));
+
+
+
+*/
