@@ -5,6 +5,7 @@ import {Link, Route, NavLink, withRouter} from "react-router-dom";
 import MapY from "./MapY";
 import StationTransport from "./StationTransport";
 import {connect} from "react-redux";
+import axios from "axios";
 
 // alex: PureComponent
 class SelectedTransport extends Component {
@@ -23,15 +24,17 @@ class SelectedTransport extends Component {
 
     componentDidMount() {
         // alex: не здесь
-        fetch(`/transports/${this.props.match.params.transportId}`, {method: 'POST'})
-            .then(result => result.json())
+        axios.get(`/transports/${this.props.match.params.transportId}`, {method: 'POST'})
+        // .then(res => res.json())
+            .then(res => res.data)
             .then(car => {
                 this.setState(car);
                 this.AddTransport(car.car);
             });
 
-        fetch(`/transports/get-stations/${this.props.match.params.transportId}`)
-            .then(result => result.json())
+        axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
+        // .then(res => res.json())
+            .then(res => res.data)
             .then(result => {
                 this.props.onAddStations(result);
             });
@@ -48,8 +51,8 @@ class SelectedTransport extends Component {
     };
 
     getPosition() {
-        fetch(`/transports/position/${this.props.match.params.transportId}`)
-            .then(result => result.json())
+        axios.get(`/transports/position/${this.props.match.params.transportId}`)
+            .then(result => result.data)
             .then(results => {
                 let {car} = this.state;
                 if (parseInt(results.count[0]) !== car.directionOne || parseInt(results.count[1]) !== car.directionTwo) {
