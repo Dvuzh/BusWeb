@@ -24,16 +24,15 @@ class SelectedTransport extends Component {
 
     componentDidMount() {
         // alex: не здесь
-        axios.get(`/transports/${this.props.match.params.transportId}`, {method: 'POST'})
-        // .then(res => res.json())
+        axios.post(`/transports/${this.props.match.params.transportId}`)
             .then(res => res.data)
             .then(car => {
+                console.log(car)
                 this.setState(car);
                 this.AddTransport(car.car);
             });
 
         axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
-        // .then(res => res.json())
             .then(res => res.data)
             .then(result => {
                 this.props.onAddStations(result);
