@@ -1,5 +1,6 @@
 import React, {PureComponent} from "react";
 import CurrentTransport from "./CurrentTransport";
+import axios from "axios";
 
 function updateTransport(transports, res) {
     let updateArray = transports;
@@ -22,15 +23,18 @@ class Transports extends PureComponent {
     state = {buses: [], trams: [], trolleys: []};
 
     componentDidMount() {
-        fetch('/transports/buses')
-            .then(res => res.json())
+        axios.get('/transports/buses')
+            // .then(res => res.json())
+            .then(res => res.data)
             .then(buses => this.setState(buses));
-        fetch('/transports/trams')
-            .then(res => res.json())
+        axios.get('/transports/trams')
+            // .then(res => res.json())
+            .then(res => res.data)
             .then(trams => this.setState(trams));
 
-        fetch('/transports/trolleys')
-            .then(res => res.json())
+        axios.get('/transports/trolleys')
+            // .then(res => res.json())
+            .then(res => res.data)
             .then(trolleys => this.setState(trolleys));
 
         this.updateCountTransports();
@@ -41,8 +45,8 @@ class Transports extends PureComponent {
     };
 
     updateCountTransports() {
-        fetch('/transports/countall')
-            .then(res => res.json())
+        axios.get('/transports/countall')
+            .then(res => res.data)
             .then(res => {
                 const buses = updateTransport(this.state.buses, res);
                 const trams = updateTransport(this.state.trams, res);

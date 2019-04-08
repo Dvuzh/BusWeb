@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {YMaps, Map, Placemark, Polyline} from 'react-yandex-maps';
 import bus_station from "../images/map_bus_station.png"
+import axios from "axios";
 
 // import bus_now from '../images/bus_now.png';
 // import styled from 'styled-components';
@@ -91,8 +92,8 @@ class MapY extends Component {
     };
 
     getPosition() {
-        fetch(`/transports/position/${this.state.transportId}`)
-            .then(result => result.json())
+        axios.get(`/transports/position/${this.state.transportId}`)
+            .then(result => result.data)
             .then(results => {
                 let placemarks = [];
 
@@ -137,8 +138,8 @@ class MapY extends Component {
 
             this.setState({timerId});
 
-            fetch(`/transports/route-transport/${this.state.transportId}`)
-                .then(result => result.json())
+            axios.get(`/transports/route-transport/${this.state.transportId}`)
+                .then(result => result.data)
                 .then((result) => {
                     // console.log(result)
                     let routes = [];

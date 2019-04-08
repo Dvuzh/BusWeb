@@ -6,6 +6,7 @@ import MapY from "./components/MapY";
 import FilterTransports from "./components/FilterTransports";
 import Transports from "./components/Transports";
 import ScrollUpButton from "react-scroll-up-button";
+import axios from "axios";
 
 function Header(props) {
     return (
@@ -38,12 +39,12 @@ class App extends PureComponent {
         this.setState({amountTransposrt : value})
     };
     componentDidMount() {
-        fetch('/transports/amount')
-            .then(res => res.json())
+        axios.get('/transports/amount')
+            .then(res => res.data)
             .then(amountTransposrt => this.setState(amountTransposrt));
 
-        fetch('/weather/search-location-weather')
-            .then(res => res.json())
+        axios.get('/weather/search-location-weather')
+            .then(res => res.data)
             .then((temperature) => {this.setState( {temperature : temperature.temperature.main.temp})});
     }
 
