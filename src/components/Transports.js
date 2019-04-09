@@ -4,10 +4,8 @@ import axios from "axios";
 
 function updateTransport(transports, res) {
     let updateArray = transports;
-    // alex: map ожидает что ты вернешь значение, иначе forEach
-    updateArray.map(element => {
-        // alex: используй === вместо == (=== сравнение по значению, == сравнение по ссылке)
-        const currentCountTransport = res.filter(item => item.id == element.id);
+    updateArray.forEach(element => {
+        const currentCountTransport = res.filter(item => item.id === element.id.toString());
 
         currentCountTransport.forEach(el => {
             if (el.direction === "0")
@@ -18,6 +16,7 @@ function updateTransport(transports, res) {
     });
     return updateArray;
 }
+
 // alex: можно объявить аттрибутом класса компонента
 let timerId = 0;
 
@@ -28,8 +27,8 @@ class Transports extends PureComponent {
     componentDidMount() {
 
         // alex: fetch делай в thunk экшене
-            axios.get('/transports/buses')
-                .then(res => res.data)
+        axios.get('/transports/buses')
+            .then(res => res.data)
             .then(buses => this.setState(buses));
         axios.get('/transports/trams')
             .then(res => res.data)
@@ -83,7 +82,7 @@ class Transports extends PureComponent {
     }
 
     render() {
-        const { buses, trams, trolleys } = this.state;
+        const {buses, trams, trolleys} = this.state;
         const allCars = this.allCars([buses, trams, trolleys]);
 
         return (

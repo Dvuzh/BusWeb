@@ -121,7 +121,7 @@ span, p {
 
 .row-transports {
     display: grid;
-    grid-template-columns: repeat(14, 90px);
+    grid-template-columns: repeat(5, 90px);
     grid-auto-rows: 158px;
     grid-gap: 5px;
     justify-content: center;

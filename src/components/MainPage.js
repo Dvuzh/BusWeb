@@ -1,6 +1,6 @@
 import React, {PureComponent} from "react";
 import '../App.css';
-import MapY from "./MapY";
+import Maps from "./maps/Maps";
 import FilterTransports from "./FilterTransports";
 import Transports from "./Transports";
 import ScrollUpButton from "react-scroll-up-button";
@@ -32,14 +32,15 @@ function Header(props) {
 
 class MainPage extends PureComponent {
     // alex: amountTransposrt: 0, temperature : 0 -- можно хранить в сторе
-    state = {filter: -1, isMapVisible: false, amountTransposrt: 0, temperature : 0};
+    state = {filter: -1, isMapVisible: false, amountTransposrt: 0, temperature: 0};
 
     updateData = (value) => {
         this.setState({filter: value});
     };
-    updateCountAll =(value) =>{
-        this.setState({amountTransposrt : value})
+    updateCountAll = (value) => {
+        this.setState({amountTransposrt: value})
     };
+
     componentDidMount() {
 
         // в thunk.
@@ -53,8 +54,15 @@ class MainPage extends PureComponent {
         // если что, то это должно максимум в service обрабатыватся или в санке
         axios.get('/weather/search-location-weather')
             .then(res => res.data)
-            .then((temperature) => {this.setState( {temperature : temperature.temperature.main.temp})});
+            .then((temperature) => {
+                this.setState({temperature: temperature.temperature.main.temp})
+            });
     }
+
+
+    handleClick = isMapVisible => {
+        this.setState({isMapVisible: isMapVisible})
+    };
 
     render() {
         return (
@@ -66,21 +74,20 @@ class MainPage extends PureComponent {
                     ContainerClassName='scrollup-btn'
                     TransitionClassName='scrollup-btn__toggled'
                 />
-                <Header amountTransposrt={this.state.amountTransposrt} temperature={ this.state.temperature}/>
+                <Header amountTransposrt={this.state.amountTransposrt} temperature={this.state.temperature}/>
                 <section>
                     <div className="container">
                         <button type="button" className="btn-map"
-                            /* alex: давай в метод класса?) handleClick */
-                                onClick={() => this.setState({isMapVisible: !this.state.isMapVisible})}> Где я
+                                onClick={() => this.handleClick(!this.state.isMapVisible)}> Где я
                         </button>
-                        {this.state.isMapVisible && <MapY />}
+                        {this.state.isMapVisible && <Maps/>}
                     </div>
                 </section>
                 <FilterTransports updateData={this.updateData}/>
                 <Transports filter={this.state.filter} updateCountAll={this.updateCountAll}/>
-
             </div>
         );
     }
 }
+
 export default MainPage;

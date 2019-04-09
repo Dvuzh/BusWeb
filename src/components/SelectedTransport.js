@@ -1,20 +1,19 @@
-import React, {PureComponent} from "react";
+import React, {Component} from "react";
 
 import {Link, Route, NavLink, withRouter} from "react-router-dom";
 
-import MapY from "./MapY";
+import Maps from "./maps/Maps";
 import StationTransport from "./StationTransport";
 import {connect} from "react-redux";
 import axios from "axios";
 
-class SelectedTransport extends PureComponent {
+class SelectedTransport extends Component {
 
     state = {
         car: {}
     };
 
     componentDidMount() {
-        // alex: не здесь
         axios.post(`/transports/${this.props.match.params.transportId}`)
             .then(res => res.data)
             .then(car => {
@@ -81,7 +80,7 @@ class SelectedTransport extends PureComponent {
 
 
                 <Route path="/route/:transportId/station" component={StationTransport}/>
-                <Route path="/route/:transportId/map" component={MapY} isMap={1}/>
+                <Route path="/route/:transportId/map" component={Maps} isMap={1}/>
             </div>
         );
     }
