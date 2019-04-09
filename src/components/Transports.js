@@ -29,16 +29,13 @@ class Transports extends PureComponent {
 
         // alex: fetch делай в thunk экшене
             axios.get('/transports/buses')
-            // .then(res => res.json())
                 .then(res => res.data)
             .then(buses => this.setState(buses));
         axios.get('/transports/trams')
-            // .then(res => res.json())
             .then(res => res.data)
             .then(trams => this.setState(trams));
 
         axios.get('/transports/trolleys')
-            // .then(res => res.json())
             .then(res => res.data)
             .then(trolleys => this.setState(trolleys));
 
@@ -86,12 +83,8 @@ class Transports extends PureComponent {
     }
 
     render() {
-        /* alex: как вариант
         const { buses, trams, trolleys } = this.state;
         const allCars = this.allCars([buses, trams, trolleys]);
-        */
-        const transports = [this.state.buses, this.state.trams, this.state.trolleys];
-        const allCars = this.allCars(transports);
 
         return (
             <section>

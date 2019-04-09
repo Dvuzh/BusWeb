@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 
 import {Link, Route, NavLink, withRouter} from "react-router-dom";
 
@@ -7,29 +7,19 @@ import StationTransport from "./StationTransport";
 import {connect} from "react-redux";
 import axios from "axios";
 
-// alex: PureComponent
-class SelectedTransport extends Component {
-    /* alex:
+class SelectedTransport extends PureComponent {
+
     state = {
         car: {}
-    }
-    */
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            car: {},
-        };
-    }
+    };
 
     componentDidMount() {
         // alex: не здесь
         axios.post(`/transports/${this.props.match.params.transportId}`)
             .then(res => res.data)
             .then(car => {
-                console.log(car)
                 this.setState(car);
-                this.AddTransport(car.car);
+                this.props.onAddTransport(car.car);
             });
 
         axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
@@ -39,10 +29,6 @@ class SelectedTransport extends Component {
             });
 
         this.getPosition();
-    }
-
-    AddTransport(car) {
-        this.props.onAddTransport(car);
     }
 
     componentWillUnmount() {
@@ -58,7 +44,7 @@ class SelectedTransport extends Component {
                     car.directionOne = parseInt(results.count[0]);
                     car.directionTwo = parseInt(results.count[1]);
                     this.setState({car});
-                    this.AddTransport(car);
+                    this.props.onAddTransport(car);
                 }
                 this.props.onAddRoutes(results.position);
 
@@ -102,37 +88,11 @@ class SelectedTransport extends Component {
 }
 
 export default connect(
-    state => ({
-        // alex: а зачем тебе здесь эти данные из стора если в компоненте SelectedTransport ты их не используешь?
-        transport: state.transport,
-        stations: state.stations
-    }),
+    state => ({}),
     dispatch => ({
-        onAddTransport: (transport) => {
-            dispatch({type: 'ADD_TRANSPORT', transport: transport});
-        },
-        onAddStations: (stations) => {
-            dispatch({type: 'ADD_STATIONS', stations: stations});
-        },
-        onAddRoutes: (routes) => {
-            dispatch({type: 'ADD_ROUTES', routes: routes});
-        }
-    })
-)(withRouter(SelectedTransport));
-
-/* alex: some kind of magic
-export default connect(
-    state => ({
-        transport: state.transport,
-        stations: state.stations
-    }),
-    dispatch => ({
-        onAddTransport: transport => dispatch({type: 'ADD_TRANSPORT', transport}),
+        // transport => addTransport(transport),
+        onAddTransport: transport => dispatch({type: 'ADD_TRANSPORT', transport}),//transport => dispatch({type: 'ADD_TRANSPORT', transport}),// transport => addTransport(transport) //transport => dispatch({type: 'ADD_TRANSPORT', transport}),
         onAddStations: stations => dispatch({type: 'ADD_STATIONS', stations}),
-        onAddRoutes: routes => dispatch({type: 'ADD_ROUTES', routes})
+        onAddRoutes: routes => dispatch({type: 'ADD_ROUTES', routes}),
     })
 )(withRouter(SelectedTransport));
-
-
-
-*/

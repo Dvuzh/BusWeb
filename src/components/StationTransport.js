@@ -225,10 +225,5 @@ export default connect(
         stations: state.stations,
         routes: state.routes
     }),
-    dispatch => ({
-        // alex: а зачем этот метод здесь?
-        onAddTransport: (transport) => {
-            dispatch({type: 'ADD_CAR', transport: transport});
-        }
-    })
+    dispatch => ({ })
 )(withRouter(StationTransport));

@@ -19,10 +19,11 @@ const mapState = {center: [54.9924400, 73.3685900], zoom: 11, controls: []};
 // alex: здесь очень много больших компонентов в одном файле, было бы удобнее их в разные файлы и в папочку maps, например
 const ContactMap = (props) => {
     /*
-    alex: 
+    alex:
 
     сonst { stations, direction } = props;
     */
+
     return (
         <YMaps>
             <Map state={mapState} width="100%" height="500px"

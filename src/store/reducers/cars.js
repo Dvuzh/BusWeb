@@ -8,3 +8,15 @@ export default function transportState(state = {}, action) {
     }
     return state;
 }
+
+// import { createAction, handleActions, combineActions } from 'redux-actions';
+//
+//
+// const addTransport = createAction('ADD_TRANSPORT');
+//
+// const transportState = {
+//     [addTransport]: (state, action) => action.transport
+// };
+//
+//
+// export default transportState;
