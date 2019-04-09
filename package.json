@@ -33,5 +33,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "proxy": "http://bus.dextudio.com:3001"
+  "proxy": "http://bus.dextudio.com:2222",
+  "homepage": "http://bus.dextudio.com/"
 }
