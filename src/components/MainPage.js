@@ -6,9 +6,6 @@ import Transports from "./Transports";
 import ScrollUpButton from "react-scroll-up-button";
 import axios from "axios";
 
-// alex: вынесла бы в отдельный файл, вообще бы реорганизовала бы компоненты по папкам.
-// например heaher/Header.js
-// + добавила бы Header.styles.js где настроила бы стили взамен использования css-классов
 function Header(props) {
     return (
         <section>
@@ -31,7 +28,7 @@ function Header(props) {
 }
 
 class MainPage extends PureComponent {
-    // alex: amountTransposrt: 0, temperature : 0 -- можно хранить в сторе
+
     state = {filter: -1, isMapVisible: false, amountTransposrt: 0, temperature: 0};
 
     updateData = (value) => {
@@ -43,15 +40,10 @@ class MainPage extends PureComponent {
 
     componentDidMount() {
 
-        // в thunk.
         axios.get('/transports/amount')
             .then(res => res.data)
             .then(amountTransposrt => this.setState(amountTransposrt));
 
-        // alex: вот такая штука говорит о том, что где-то что-то пошло не так...
-        // temperature.temperature.main.temp, потому что компоненту должно быть фиолетово,
-        // как там другой сервис данные ему отправляет, ему надо тупо получить пропс,
-        // если что, то это должно максимум в service обрабатыватся или в санке
         axios.get('/weather/search-location-weather')
             .then(res => res.data)
             .then((temperature) => {

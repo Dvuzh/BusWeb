@@ -16,7 +16,7 @@ class Maps extends PureComponent {
     };
 
     getPosition() {
-        // alex: фетч лучше в санки, и используй async/await, then уже не модно
+
         axios.get(`/transports/position/${this.state.transportId}`)
             .then(result => result.data)
             .then(results => {

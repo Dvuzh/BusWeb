@@ -5,10 +5,7 @@ import bus_now from "../../images/bus_now.png";
 import React, {PureComponent} from "react";
 
 class TransportStationsMap extends PureComponent {
-    /*
-    alex:
-    сonst { stations, direction } = props;
-    */
+
     state = {map: null, ymaps: null, iconContentTemplate: null};
 
     createTemplateLayoutFactory = ymaps => {
@@ -31,7 +28,6 @@ class TransportStationsMap extends PureComponent {
                      onLoad={this.createTemplateLayoutFactory}
                      instanceRef={ref => this.setState({map: ref})}
                 >
-                    {/*alex: просто props.stations.length, 0 -- это falsy value*/}
                     {this.props.stations.length !== 0 &&
                     this.props.stations.map((direction, i) =>
                         direction.map((station, index) =>

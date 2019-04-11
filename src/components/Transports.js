@@ -17,16 +17,14 @@ function updateTransport(transports, res) {
     return updateArray;
 }
 
-// alex: можно объявить аттрибутом класса компонента
 let timerId = 0;
 
 class Transports extends PureComponent {
-    // alex: ты же вроде редакс используешь?
+
     state = {buses: [], trams: [], trolleys: []};
 
     componentDidMount() {
 
-        // alex: fetch делай в thunk экшене
         axios.get('/transports/buses')
             .then(res => res.data)
             .then(buses => this.setState(buses));
@@ -47,7 +45,6 @@ class Transports extends PureComponent {
 
     updateCountTransports() {
 
-        // alex: так и просится вынесение этого в санки и вместо setState экшен для редакса
         axios.get('/transports/countall')
             .then(res => res.data)
             .then(res => {
