@@ -131,6 +131,7 @@ span, p {
     width: 100%;
     display: inline-flex;
     justify-content: space-around;
+    padding: 30px 0;
 }
 
 .titlebar {

@@ -3,7 +3,7 @@ import {YMaps, Map} from 'react-yandex-maps';
 
 const setAutoCenter = (ymaps, map) => {
     ymaps.geolocation.get({
-        provider: 'browser'
+        provider: 'yandex'
     }).then(function (result) {
         map.setCenter(result.geoObjects.get(0).geometry.getCoordinates(), 14, {duration: 300});
         map.geoObjects.add(result.geoObjects);
