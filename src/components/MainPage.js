@@ -13,7 +13,7 @@ function Header(props) {
                 <div className="inner-content">
                     <div className="counter-title">
                         <span> {props.amountTransposrt}</span>
-                        <p> Total Buses</p>
+                        <p> Total Vehicles</p>
                     </div>
                 </div>
                 <div className="inner-content">

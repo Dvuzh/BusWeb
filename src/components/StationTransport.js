@@ -162,13 +162,13 @@ class FilterDirection extends Component {
                         <button className={'btn-left' + (countDirection === 0 ? ' active' : "")} onClick={() => {
                             this.setState({countDirection: 0})
                         }}>
-                            One way
+                            One direction
                         </button>
 
                         <button className={'btn-rigth' + (countDirection === 1 ? ' active' : "")} onClick={() => {
                             this.setState({countDirection: 1})
                         }}>
-                            Both ways
+                            Both directions
                         </button>
                     </div>
                     <br/><br/>

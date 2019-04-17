@@ -48,7 +48,7 @@ class TransportStationsMap extends PureComponent {
 
                                 properties={
                                     {
-                                        balloonContentHeader: "Bus Stop Name",
+                                        balloonContentHeader: "Bus Stop info",
                                         balloonContentBody:
                                             station.name + str
                                     }
