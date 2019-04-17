@@ -22,12 +22,9 @@ class SelectedTransport extends Component {
             });
 
         axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
-            // .then(res => res.data)
+            .then(res => res.data)
             .then(result => {
-                console.log(result.data)
-
-
-                this.props.onAddStations(result.data);
+                this.props.onAddStations(result);
             });
 
         this.getPosition();
