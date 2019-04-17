@@ -1,8 +1,9 @@
-// import React from "react";
 import {Map, Placemark, Polyline, YMaps, withYMaps} from "react-yandex-maps";
 import bus_station from "../../images/map_bus_station.png";
 import bus_now from "../../images/bus_now.png";
 import React, {PureComponent} from "react";
+import {connect} from "react-redux";
+
 
 class TransportStationsMap extends PureComponent {
 
@@ -28,25 +29,41 @@ class TransportStationsMap extends PureComponent {
                      onLoad={this.createTemplateLayoutFactory}
                      instanceRef={ref => this.setState({map: ref})}
                 >
-                    {this.props.stations.length !== 0 &&
+                    {this.props.stations.length !== 0 && this.props.stationsI.length !== undefined &&
                     this.props.stations.map((direction, i) =>
-                        direction.map((station, index) =>
-                            <Placemark key={index}
-                                       geometry={[station.latitude, station.longitude]}
+                        direction.map((station, index) => {
+                            const buses = this.props.stationsI[index].transports.filter(item => item.type === 0);
+                            const trams = this.props.stationsI[index].transports.filter(item => item.type === 1);
+                            const trolleys = this.props.stationsI[index].transports.filter(item => item.type === 2);
 
-                                       properties={{
-                                           balloonContentHeader: "Остановка",
-                                           balloonContentBody: station.name,
-                                       }}
+                            let str = '';
+                            if (buses.length > 0) str += "<br/>Автобусы: " + buses.map(item => item.num);
+                            if (trams.length > 0) str += "<br/>Трамвай: " + trams.map(item => item.num);
+                            if (trolleys.length > 0) str += "<br/>Троллейбусы: " + trolleys.map(item => item.num);
 
-                                       options={{
-                                           iconLayout: 'default#image',
-                                           iconImageHref: bus_station,
-                                           iconImageSize: [20, 20],
-                                           iconImageOffset: [-10, -10],
-                                       }}
+
+                            return < Placemark
+                                key={index}
+                                geometry={[station.latitude, station.longitude]}
+
+                                properties={
+                                    {
+                                        balloonContentHeader: "Остановка",
+                                        balloonContentBody:
+                                            station.name + str
+                                    }
+                                }
+
+                                options={
+                                    {
+                                        iconLayout: 'default#image',
+                                        iconImageHref: bus_station,
+                                        iconImageSize: [20, 20],
+                                        iconImageOffset: [-10, -10],
+                                    }
+                                }
                             />
-                        )
+                        })
                     )}
 
                     {this.props.placemarks.length !== 0 && this.state.iconContentTemplate && this.props.placemarks.map((direction, i) =>
@@ -95,5 +112,7 @@ class TransportStationsMap extends PureComponent {
     };
 }
 
-
-export default TransportStationsMap;
+export default connect(
+    state => ({stationsI: state.stations, transport: state.routes,}),
+    dispatch => ({})
+)(TransportStationsMap);

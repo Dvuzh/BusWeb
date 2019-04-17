@@ -10,7 +10,7 @@ class App extends PureComponent {
                 <div>
                     <Switch>
                         <Route exact path="/" component={MainPage}/>
-                        <Route path="/route/:transportId" component={SelectedTransport}/>
+                        <Route path="/routes/:transportId" component={SelectedTransport}/>
                     </Switch>
                 </div>
             </BrowserRouter>

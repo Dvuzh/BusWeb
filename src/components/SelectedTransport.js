@@ -22,9 +22,10 @@ class SelectedTransport extends Component {
             });
 
         axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
-            .then(res => res.data)
+            // .then(res => res.data)
             .then(result => {
-                this.props.onAddStations(result);
+                // console.log(result.data)
+                this.props.onAddStations(result.data);
             });
 
         this.getPosition();
@@ -71,16 +72,16 @@ class SelectedTransport extends Component {
                         <div className="titlebar">
                             <ul className="list-transport">
                                 <Link to={"/"}> Главная </Link>
-                                <NavLink to={`/route/${car.id}/station`}> Остановки </NavLink>
-                                <NavLink exact to={`/route/${car.id}/map`}> На карте </NavLink>
+                                <NavLink to={`/routes/${car.id}/stations`}> Остановки </NavLink>
+                                <NavLink exact to={`/routes/${car.id}/map`}> На карте </NavLink>
                             </ul>
                         </div>
                     </div>
                 </section>
 
 
-                <Route path="/route/:transportId/station" component={StationTransport}/>
-                <Route path="/route/:transportId/map" component={Maps} isMap={1}/>
+                <Route path="/routes/:transportId/stations" component={StationTransport}/>
+                <Route path="/routes/:transportId/map" component={Maps} isMap={1}/>
             </div>
         );
     }

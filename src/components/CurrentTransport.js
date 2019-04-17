@@ -10,7 +10,7 @@ class CurrentTransport extends Component {
 
         return (
             <div className="block-car" id={this.props.car.id}>
-                <Link to={`/route/${this.props.car.id}/station`}>
+                <Link to={`/routes/${this.props.car.id}/stations`}>
                     <div className="bus-title">
                         <img src={typeTransport[0]}
                              className="car-image" alt=""/>
