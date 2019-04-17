@@ -6,7 +6,7 @@ import troll from '../images/troll_index.png';
 
 class CurrentTransport extends Component {
     render() {
-        const typeTransport = this.props.car.type === 0 ? [ bus , 'Автобус'] : this.props.car.type === 1 ? [ tram, 'Трамвай'] : [ troll, 'Троллейбус'] ;
+        const typeTransport = this.props.car.type === 0 ? [ bus , 'Bus'] : this.props.car.type === 1 ? [ tram, 'Tram'] : [ troll, 'Trolley'] ;
 
         return (
             <div className="block-car" id={this.props.car.id}>
@@ -18,7 +18,7 @@ class CurrentTransport extends Component {
                         <span
                             className={'red-title'}>{typeTransport[1]} </span>
                         <br/>
-                        <span> № {this.props.car.num}</span>
+                        <span> # {this.props.car.num}</span>
                     </div>
                     <span className="gray-title">({this.props.car.directionOne}/{this.props.car.directionTwo})</span>
                 </Link>

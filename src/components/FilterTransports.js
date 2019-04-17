@@ -15,7 +15,7 @@ class FilterTransports extends PureComponent {
     }
 
     render() {
-        const FILTERS = ['Все', 'Автобусы', 'Трамваи', 'Троллейбусы'];
+        const FILTERS = ['All', 'Buses', 'Trams', 'Trolleybuses'];
         const selectFilter = index => this.addActiveClass(index);
 
         const activeClasses = this.state.activeClasses;

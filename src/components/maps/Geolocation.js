@@ -15,6 +15,7 @@ const GeolocationMap = (mapState) => {
     return (
         <YMaps query={{
             apikey: "e6c3845d-36f8-44db-8046-aad82a5cd030",
+            lang: 'en_RU'
         }}>
             <Map state={mapState} width="100%" height="500px" modules={['geolocation']}
                  onLoad={ymaps => setAutoCenter(ymaps, map)} instanceRef={ref => map = ref}/>

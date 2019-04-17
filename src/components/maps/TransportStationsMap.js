@@ -1,4 +1,4 @@
-import {Map, Placemark, Polyline, YMaps, withYMaps} from "react-yandex-maps";
+import {Map, Placemark, Polyline, YMaps} from "react-yandex-maps";
 import bus_station from "../../images/map_bus_station.png";
 import bus_now from "../../images/bus_now.png";
 import React, {PureComponent} from "react";
@@ -23,7 +23,7 @@ class TransportStationsMap extends PureComponent {
 
     render() {
         return (
-            <YMaps>
+            <YMaps query={{ lang: 'en_RU' }}>
                 <Map state={this.props.mapState} width="100%" height="500px"
                      modules={['geoObject.addon.balloon', 'templateLayoutFactory', 'Placemark', 'layout.ImageWithContent']}
                      onLoad={this.createTemplateLayoutFactory}
@@ -37,9 +37,9 @@ class TransportStationsMap extends PureComponent {
                             const trolleys = this.props.stationsI[index].transports.filter(item => item.type === 2);
 
                             let str = '';
-                            if (buses.length > 0) str += "<br/>Автобусы: " + buses.map(item => item.num);
-                            if (trams.length > 0) str += "<br/>Трамвай: " + trams.map(item => item.num);
-                            if (trolleys.length > 0) str += "<br/>Троллейбусы: " + trolleys.map(item => item.num);
+                            if (buses.length > 0) str += "<br/>Buses: " + buses.map(item => item.num);
+                            if (trams.length > 0) str += "<br/>Trams: " + trams.map(item => item.num);
+                            if (trolleys.length > 0) str += "<br/>Trolleybuses: " + trolleys.map(item => item.num);
 
 
                             return < Placemark
@@ -48,7 +48,7 @@ class TransportStationsMap extends PureComponent {
 
                                 properties={
                                     {
-                                        balloonContentHeader: "Остановка",
+                                        balloonContentHeader: "Bus Stop Name",
                                         balloonContentBody:
                                             station.name + str
                                     }
@@ -75,8 +75,8 @@ class TransportStationsMap extends PureComponent {
                                        }}
 
                                        properties={{
-                                           balloonContentHeader: "Информация о движени",
-                                           balloonContentBody: "Время обновления: " + item.upd_time.match(/([0-2][0-9]){1}(:[0-6][0-9]){2}$/g) + "<br>Расстояние до остановки: " + Math.round(item.dst_next_st, 1) + "м. <br> Скорость: " + Math.round(item.speed, 1) + "км/ч ",
+                                           balloonContentHeader: "Vehicle Info",
+                                           balloonContentBody: "Update Time: " + item.upd_time.match(/([0-2][0-9]){1}(:[0-6][0-9]){2}$/g) + "<br>Distance To Next Stop: " + Math.round(item.dst_next_st, 1) + "м. <br>  Speed: " + Math.round(item.speed, 1) + "km/h ",
                                            iconContent: -item.azimuth
                                        }}
 

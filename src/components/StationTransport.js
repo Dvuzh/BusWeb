@@ -162,13 +162,13 @@ class FilterDirection extends Component {
                         <button className={'btn-left' + (countDirection === 0 ? ' active' : "")} onClick={() => {
                             this.setState({countDirection: 0})
                         }}>
-                            Одно направление
+                            One way
                         </button>
 
                         <button className={'btn-rigth' + (countDirection === 1 ? ' active' : "")} onClick={() => {
                             this.setState({countDirection: 1})
                         }}>
-                            Оба направления
+                            Both ways
                         </button>
                     </div>
                     <br/><br/>
@@ -191,8 +191,8 @@ const FilteredStations = (properties) => {
         <table className="list-station">
             <tbody>
             <StyledTr>
-                <td>В данном направлении</td>
-                <StyledTd> ({properties.countTransport})ед. </StyledTd>
+                <td> This way</td>
+                <StyledTd> ({properties.countTransport}) vehicles. </StyledTd>
             </StyledTr>
             {properties.listStation}
             </tbody>

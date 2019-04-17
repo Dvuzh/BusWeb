@@ -24,7 +24,9 @@ class SelectedTransport extends Component {
         axios.get(`/transports/get-stations/${this.props.match.params.transportId}`)
             // .then(res => res.data)
             .then(result => {
-                // console.log(result.data)
+                console.log(result.data)
+
+
                 this.props.onAddStations(result.data);
             });
 
@@ -62,18 +64,18 @@ class SelectedTransport extends Component {
                     <div className="container header">
                         <div className="titlebar">
                                   <span
-                                      className="red-title">{car.type === 0 ? 'Автобус ' : car.type === 1 ? 'Трамвай ' : 'Троллейбус '}
-                                      № {car.num}</span>
+                                      className="red-title">{car.type === 0 ? 'Bus ' : car.type === 1 ? 'Tram ' : 'Trolley '}
+                                      # {car.num}</span>
                             <br/>
-                            <span> Всего на маршруте : </span>
+                            <span> Total Number: </span>
                             <span
-                                className="red-title">{parseInt(car.directionOne) + parseInt(car.directionTwo)} ед.</span>
+                                className="red-title">{parseInt(car.directionOne) + parseInt(car.directionTwo)} </span>
                         </div>
                         <div className="titlebar">
                             <ul className="list-transport">
-                                <Link to={"/"}> Главная </Link>
-                                <NavLink to={`/routes/${car.id}/stations`}> Остановки </NavLink>
-                                <NavLink exact to={`/routes/${car.id}/map`}> На карте </NavLink>
+                                <Link to={"/"}> Home </Link>
+                                <NavLink to={`/routes/${car.id}/stations`}> Stops </NavLink>
+                                <NavLink exact to={`/routes/${car.id}/map`}> Map </NavLink>
                             </ul>
                         </div>
                     </div>

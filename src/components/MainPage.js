@@ -13,13 +13,13 @@ function Header(props) {
                 <div className="inner-content">
                     <div className="counter-title">
                         <span> {props.amountTransposrt}</span>
-                        <p> На маршрутах</p>
+                        <p> Total Buses</p>
                     </div>
                 </div>
                 <div className="inner-content">
                     <div className="counter-title">
                         <span> {props.temperature} °С</span>
-                        <p> На улице</p>
+                        <p> Temperature</p>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@ class MainPage extends PureComponent {
                 <section>
                     <div className="container">
                         <button type="button" className="btn-map"
-                                onClick={() => this.handleClick(!this.state.isMapVisible)}> Где я
+                                onClick={() => this.handleClick(!this.state.isMapVisible)}> I'm Here
                         </button>
                         {this.state.isMapVisible && <Maps/>}
                     </div>
